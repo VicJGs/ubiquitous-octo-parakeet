@@ -9,6 +9,7 @@ import TaskDetailPage from './pages/TaskDetailPage';
 import WorkflowDesignerPage from './pages/WorkflowDesignerPage';
 import KnowledgePage from './pages/KnowledgePage';
 import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
+import KnowledgeEditorPage from './pages/KnowledgeEditorPage';
 import ProfilePage from './pages/ProfilePage';
 import MainPage from './pages/MainPage';
 
@@ -26,6 +27,7 @@ const App = () => (
       <Route path="/workflow-designer" element={<WorkflowDesignerPage />} />
       <Route path="/knowledge" element={<KnowledgePage />} />
       <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
+      <Route path="/knowledge/editor" element={<KnowledgeEditorPage />} />
       <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   </AppShell>
