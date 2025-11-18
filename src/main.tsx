@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useHref, useNavigate } from 'react-router-dom';
+import { HeroUIProvider } from '@heroui/react';
 import App from './App';
 import './styles.css';
+
+const AppWithProviders = () => {
+  const navigate = useNavigate();
+  const href = useHref;
+
+  return (
+    <HeroUIProvider navigate={navigate} useHref={href}>
+      <App />
+    </HeroUIProvider>
+  );
+};
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <AppWithProviders />
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
