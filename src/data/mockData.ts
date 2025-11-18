@@ -81,8 +81,11 @@ export const tasks = [
     priority: 'High',
     project: 'RiskOps',
     createdDate: '2024-03-04',
+    dueDate: '2024-03-12',
     creator: 'Nova Liang',
-    assignee: 'Priya Kumar'
+    assignee: 'Priya Kumar',
+    tags: ['logistics', 'risk'],
+    effort: '6h'
   },
   {
     id: 'task-02',
@@ -92,8 +95,95 @@ export const tasks = [
     priority: 'Medium',
     project: 'DataLab',
     createdDate: '2024-03-02',
+    dueDate: '2024-03-14',
     creator: 'Avery Chen',
-    assignee: 'Avery Chen'
+    assignee: 'Avery Chen',
+    tags: ['synthetic-data', 'governance'],
+    effort: '4h'
+  },
+  {
+    id: 'task-03',
+    name: 'Climate Impact Briefing',
+    objective: 'Summarize climate disclosures and mitigation levers.',
+    status: 'Backlog',
+    priority: 'Medium',
+    project: 'Sustain',
+    createdDate: '2024-02-29',
+    dueDate: '2024-03-18',
+    creator: 'Samira Patel',
+    assignee: 'Samira Patel',
+    tags: ['climate', 'reporting'],
+    effort: '5h'
+  },
+  {
+    id: 'task-04',
+    name: 'Vendor Reputation Sweep',
+    objective: 'Capture latest news sentiment for tier-1 vendors.',
+    status: 'Blocked',
+    priority: 'High',
+    project: 'RiskOps',
+    createdDate: '2024-03-01',
+    dueDate: '2024-03-09',
+    creator: 'Avery Chen',
+    assignee: 'Nova Liang',
+    tags: ['news', 'reputation'],
+    effort: '3h'
+  },
+  {
+    id: 'task-05',
+    name: 'Market Pulse Refresh',
+    objective: 'Regenerate dashboard artifacts for weekly executive review.',
+    status: 'Completed',
+    priority: 'Low',
+    project: 'Insights',
+    createdDate: '2024-02-20',
+    dueDate: '2024-02-28',
+    creator: 'Workflow Engine',
+    assignee: 'Workflow Engine',
+    tags: ['automation', 'reporting'],
+    effort: '2h'
+  },
+  {
+    id: 'task-06',
+    name: 'Policy Tracker Validation',
+    objective: 'Cross-check AI policy tracker entries for EU region.',
+    status: 'Review',
+    priority: 'Medium',
+    project: 'Governance',
+    createdDate: '2024-03-03',
+    dueDate: '2024-03-11',
+    creator: 'Mina Alvarado',
+    assignee: 'Priya Kumar',
+    tags: ['policy', 'validation'],
+    effort: '5h'
+  },
+  {
+    id: 'task-07',
+    name: 'Data Quality Tuning',
+    objective: 'Benchmark data quality checks for ingestion pipeline.',
+    status: 'Running',
+    priority: 'High',
+    project: 'DataLab',
+    createdDate: '2024-03-05',
+    dueDate: '2024-03-15',
+    creator: 'DataOps Bot',
+    assignee: 'Avery Chen',
+    tags: ['data-quality', 'pipeline'],
+    effort: '7h'
+  },
+  {
+    id: 'task-08',
+    name: 'Emerging Tech Scan',
+    objective: 'Track weekly signals on frontier model capabilities.',
+    status: 'Pending',
+    priority: 'Low',
+    project: 'Nova Labs',
+    createdDate: '2024-03-06',
+    dueDate: '2024-03-21',
+    creator: 'Nova Liang',
+    assignee: 'Nova Liang',
+    tags: ['emerging-tech', 'weekly'],
+    effort: '3h'
   }
 ];
 
