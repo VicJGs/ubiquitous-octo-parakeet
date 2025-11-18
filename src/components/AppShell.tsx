@@ -188,55 +188,59 @@ const AppShell = ({ children }: { children: ReactNode }) => {
       </aside>
 
       <div className="main-area">
-        <Navbar isBordered maxWidth="full" className="app-navbar">
-          <NavbarBrand className="brand">
-            <div className="brand-mark" aria-hidden>
-              <LayoutGrid size={18} />
+        <header className="topbar">
+          <Navbar isBordered maxWidth="full" className="app-navbar">
+            <NavbarBrand className="brand">
+              <div className="brand-mark" aria-hidden>
+                <LayoutGrid size={18} />
+              </div>
+              <div className="brand-copy">
+                <p className="app-name">SageScope</p>
+                <p className="workspace">Atlas Research Workspace</p>
+              </div>
+            </NavbarBrand>
+
+            <div className="role-switcher" role="group" aria-label="Switch role">
+              <Button size="sm" variant={role === 'research' ? 'solid' : 'flat'} onPress={() => setRole('research')}>
+                Research
+              </Button>
+              <Button size="sm" variant={role === 'dev' ? 'solid' : 'flat'} onPress={() => setRole('dev')}>
+                Dev
+              </Button>
+              <Button size="sm" variant={role === 'admin' ? 'solid' : 'flat'} onPress={() => setRole('admin')}>
+                Admin
+              </Button>
             </div>
-            <div className="brand-copy">
-              <p className="app-name">SageScope</p>
-              <p className="workspace">Atlas Research Workspace</p>
+
+            <div className="nav-actions">
+              <Input
+                size="sm"
+                placeholder="Search"
+                startContent={<FiSearch size={16} aria-hidden />}
+                className="nav-search"
+              />
+              <Chip color="primary" variant="flat" className="role-chip">
+                {role === 'research' && 'Research'}
+                {role === 'dev' && 'Developer'}
+                {role === 'admin' && 'Admin'}
+              </Chip>
+              <User
+                name="Nova Liang"
+                description="Lead Researcher"
+                className="nav-user"
+                avatarProps={{ src: 'https://i.pravatar.cc/150?img=12' }}
+              />
             </div>
-          </NavbarBrand>
+          </Navbar>
+        </header>
 
-          <div className="role-switcher" role="group" aria-label="Switch role">
-            <Button size="sm" variant={role === 'research' ? 'solid' : 'flat'} onPress={() => setRole('research')}>
-              Research
-            </Button>
-            <Button size="sm" variant={role === 'dev' ? 'solid' : 'flat'} onPress={() => setRole('dev')}>
-              Dev
-            </Button>
-            <Button size="sm" variant={role === 'admin' ? 'solid' : 'flat'} onPress={() => setRole('admin')}>
-              Admin
-            </Button>
-          </div>
-
-          <div className="nav-actions">
-            <Input
-              size="sm"
-              placeholder="Search"
-              startContent={<FiSearch size={16} aria-hidden />}
-              className="nav-search"
-            />
-            <Chip color="primary" variant="flat" className="role-chip">
-              {role === 'research' && 'Research'}
-              {role === 'dev' && 'Developer'}
-              {role === 'admin' && 'Admin'}
-            </Chip>
-            <User
-              name="Nova Liang"
-              description="Lead Researcher"
-              className="nav-user"
-              avatarProps={{ src: 'https://i.pravatar.cc/150?img=12' }}
-            />
-          </div>
-        </Navbar>
-
-        <main className="app-content">
+        <section className="app-main">
           <GlobalStatsBar />
-          <div className="page-surface">{children}</div>
+          <main className="page-content" role="main">
+            {children}
+          </main>
           <Spacer y={4} />
-        </main>
+        </section>
       </div>
     </div>
   );
