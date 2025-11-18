@@ -1,8 +1,5 @@
-import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { EmptyState, ErrorToast, SkeletonBlock } from '../components/AsyncStates';
-import { mockData } from '../data/mockData';
-import { useMockedData } from '../hooks/useMockedData';
+import { knowledgeArticles } from '../data/mockData';
 
 const KnowledgeArticlePage = () => {
   const { id } = useParams();

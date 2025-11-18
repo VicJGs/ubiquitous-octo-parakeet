@@ -15,7 +15,6 @@ import ProfilePage from './pages/ProfilePage';
 import UserPermissionsPage from './pages/UserPermissionsPage';
 import MainPage from './pages/MainPage';
 import SettingsPage from './pages/SettingsPage';
-import UserPermissionsPage from './pages/UserPermissionsPage';
 
 const App = () => (
   <AppShell>
@@ -31,7 +30,6 @@ const App = () => (
       <Route path="/tasks/:id" element={<TaskDetailPage />} />
       <Route path="/workflows" element={<WorkflowsPage />} />
       <Route path="/workflow-designer" element={<WorkflowDesignerPage />} />
-      <Route path="/workflows" element={<WorkflowDesignerPage />} />
       <Route path="/knowledge" element={<KnowledgePage />} />
       <Route path="/knowledge/all" element={<KnowledgePage />} />
       <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />

@@ -163,7 +163,7 @@ const WorkspaceDetailPage = () => {
           <button className="ghost">View all</button>
         </div>
         <div className="timeline">
-          {mockData.activityFeed.map((activity) => (
+          {activityFeed.map((activity) => (
             <div key={activity.id} className="timeline-item">
               <span className="icon" aria-hidden>
                 <Pin size={18} />
@@ -178,7 +178,6 @@ const WorkspaceDetailPage = () => {
           ))}
         </div>
       </section>
-      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };

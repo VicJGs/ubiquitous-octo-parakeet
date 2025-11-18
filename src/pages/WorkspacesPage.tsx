@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Network, Sparkles } from 'lucide-react';
-import { workspaces } from '../data/mockData';
+import { workspaceTemplates, workspaces as seedWorkspaces } from '../data/mockData';
+import WorkspaceCreateModal from '../components/WorkspaceCreateModal';
 
 const workspaceIcons = {
   atlas: <Network size={20} aria-hidden />,
@@ -118,26 +120,10 @@ const WorkspacesPage = () => {
         </div>
       </section>
 
-      <section className="card-grid">
-        {workspaces.map((workspace) => (
-          <Link key={workspace.id} to={`/workspaces/${workspace.id}`} className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span aria-hidden>
-                {workspaceIcons[workspace.id as keyof typeof workspaceIcons] ?? <Network size={20} />}
-              </span>
-              <div>
-                <p style={{ margin: 0, fontWeight: 600 }}>{workspace.name}</p>
-                <p className="workspace" style={{ margin: 0 }}>
-                  {workspace.members} members · {workspace.activeTasks} active tasks
-                </p>
-              </div>
-            </div>
-            <p>{workspace.description}</p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#6b7280' }}>
-              <span>{workspace.workflows} workflows</span>
-              <span>Last activity {workspace.lastActivity}</span>
-            </div>
-          </div>
+      {isEmpty ? (
+        <section className="card">
+          <h2>No workspaces match your filters</h2>
+          <p className="workspace">Try adjusting the search or create a new workspace.</p>
           <div className="template-grid">
             {workspaceTemplates.map((template) => (
               <div key={template.id} className="template-card active" style={{ textAlign: 'left' }}>
@@ -162,7 +148,7 @@ const WorkspacesPage = () => {
               >
                 <div className="workspace-card-header">
                   <span className="workspace-icon" style={{ background: workspace.color }}>
-                    {workspace.icon}
+                    {workspace.icon ?? workspaceIcons[workspace.id as keyof typeof workspaceIcons] ?? <Network size={20} />}
                   </span>
                   <div>
                     <p className="workspace-name">{workspace.name}</p>
@@ -200,7 +186,7 @@ const WorkspacesPage = () => {
                     <td>
                       <div className="table-name">
                         <span className="workspace-icon" style={{ background: workspace.color }}>
-                          {workspace.icon}
+                          {workspace.icon ?? workspaceIcons[workspace.id as keyof typeof workspaceIcons] ?? <Network size={20} />}
                         </span>
                         <div>
                           <p className="workspace-name">{workspace.name}</p>
