@@ -37,16 +37,22 @@ const TaskDetailPage = () => {
             <h1 style={{ margin: 0 }}>{task.name}</h1>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button className="ghost">Edit</button>
-            <button className="ghost">Cancel</button>
-            <button className="ghost">Clone</button>
+            <Link className="ghost" to="/tasks/create">
+              Edit
+            </Link>
+            <Link className="ghost" to="/tasks">
+              Cancel
+            </Link>
+            <Link className="ghost" to="/tasks/create">
+              Clone
+            </Link>
           </div>
         </div>
         <p>{task.objective}</p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <span className="badge info">Status: {task.status}</span>
           <span className="badge info">Priority: {task.priority}</span>
-          <span className="badge info">Workspace: Atlas Research</span>
+          <span className="badge info">Workspace: {workspaceName}</span>
         </div>
         <div className="tabs">
           {['Overview', 'Phases', 'Execution Logs', 'Results', 'Settings'].map((tab) => (
@@ -204,6 +210,7 @@ const TaskDetailPage = () => {
           </div>
         </aside>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };
