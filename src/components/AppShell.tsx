@@ -1,25 +1,20 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Card, CardBody, Chip, Divider, Input, Navbar, NavbarBrand, Spacer, User } from '@heroui/react';
+import { BarChart3, ChevronLeft, ChevronRight, Folder, Home, LayoutDashboard, LayoutGrid } from 'lucide-react';
 import {
-  BarChart3,
-  BookOpen,
-  CheckSquare,
-  ChevronLeft,
-  ChevronRight,
-  Compass,
-  FileText,
-  Folder,
-  Globe2,
-  Home,
-  LayoutDashboard,
-  LayoutGrid,
-  Network,
-  Search,
-  Settings,
-  Shield,
-  Workflow
-} from 'lucide-react';
+  FiBookOpen,
+  FiCheckSquare,
+  FiCompass,
+  FiGlobe,
+  FiList,
+  FiSearch,
+  FiSettings,
+  FiShare2,
+  FiShield,
+  FiSliders,
+  FiUser
+} from 'react-icons/fi';
 import GlobalStatsBar from './GlobalStatsBar';
 
 const STORAGE_COLLAPSE_KEY = 'app-shell-collapsed';
@@ -35,63 +30,64 @@ type NavItem = {
   children?: (Omit<NavItem, 'children'> & { to: string })[];
 };
 
-const iconProps = { size: 18, strokeWidth: 1.75, 'aria-hidden': true };
+const lucideIconProps = { size: 18, strokeWidth: 1.75, 'aria-hidden': true };
+const reactIconProps = { size: 18, 'aria-hidden': true };
 
 const navHierarchy: Record<Role, NavItem[]> = {
   research: [
-    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
-    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...iconProps} /> },
+    { label: 'Main page', to: '/home', icon: <Home {...lucideIconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...lucideIconProps} /> },
     {
       label: 'My Workspaces',
-      icon: <Folder {...iconProps} />,
+      icon: <Folder {...lucideIconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
-        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
-        { label: 'Tasks', to: '/tasks', icon: '✅' },
-        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
+        { label: 'Workflows', to: '/workflows', icon: <FiShare2 {...reactIconProps} /> },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: <FiSliders {...reactIconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <FiCheckSquare {...reactIconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <FiBookOpen {...reactIconProps} /> }
       ]
     },
-    { label: 'Profile', to: '/profile', icon: '👤' },
-    { label: 'Settings', to: '/settings', icon: '⚙️' }
+    { label: 'Profile', to: '/profile', icon: <FiUser {...reactIconProps} /> },
+    { label: 'Settings', to: '/settings', icon: <FiSettings {...reactIconProps} /> }
   ],
   dev: [
-    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
-    { label: 'Dashboard', to: '/dashboard', icon: <BarChart3 {...iconProps} /> },
+    { label: 'Main page', to: '/home', icon: <Home {...lucideIconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <BarChart3 {...lucideIconProps} /> },
     {
       label: 'My Workspaces',
-      icon: <Folder {...iconProps} />,
+      icon: <Folder {...lucideIconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
-        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
-        { label: 'Tasks', to: '/tasks', icon: '✅' },
-        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
+        { label: 'Workflows', to: '/workflows', icon: <FiShare2 {...reactIconProps} /> },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: <FiSliders {...reactIconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <FiCheckSquare {...reactIconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <FiBookOpen {...reactIconProps} /> }
       ]
     },
-    { label: 'All Workflows', to: '/workflows', icon: '🌐' },
-    { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
-    { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Profile', to: '/profile', icon: '👤' },
-    { label: 'Settings', to: '/settings', icon: '⚙️' }
+    { label: 'All Workflows', to: '/workflows', icon: <FiGlobe {...reactIconProps} /> },
+    { label: 'All Tasks', to: '/tasks', icon: <FiList {...reactIconProps} /> },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: <FiCompass {...reactIconProps} /> },
+    { label: 'Profile', to: '/profile', icon: <FiUser {...reactIconProps} /> },
+    { label: 'Settings', to: '/settings', icon: <FiSettings {...reactIconProps} /> }
   ],
   admin: [
-    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
-    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...iconProps} /> },
+    { label: 'Main page', to: '/home', icon: <Home {...lucideIconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...lucideIconProps} /> },
     {
       label: 'My Workspaces',
-      icon: <Folder {...iconProps} />,
+      icon: <Folder {...lucideIconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
-        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
-        { label: 'Tasks', to: '/tasks', icon: '✅' },
-        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
+        { label: 'Workflows', to: '/workflows', icon: <FiShare2 {...reactIconProps} /> },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: <FiSliders {...reactIconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <FiCheckSquare {...reactIconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <FiBookOpen {...reactIconProps} /> }
       ]
     },
-    { label: 'All Workflows', to: '/workflows', icon: '🌐' },
-    { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
-    { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Profile', to: '/profile', icon: '👤' },
-    { label: 'Settings', to: '/settings', icon: '⚙️' },
-    { label: 'User permissions', to: '/admin/users', icon: '🛡️' }
+    { label: 'All Workflows', to: '/workflows', icon: <FiGlobe {...reactIconProps} /> },
+    { label: 'All Tasks', to: '/tasks', icon: <FiList {...reactIconProps} /> },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: <FiCompass {...reactIconProps} /> },
+    { label: 'Profile', to: '/profile', icon: <FiUser {...reactIconProps} /> },
+    { label: 'Settings', to: '/settings', icon: <FiSettings {...reactIconProps} /> },
+    { label: 'User permissions', to: '/admin/users', icon: <FiShield {...reactIconProps} /> }
   ]
 };
 
@@ -134,7 +130,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
           <Input
             size="sm"
             placeholder="Search"
-            startContent={<span aria-hidden="true">🔍</span>}
+            startContent={<FiSearch size={16} aria-hidden />}
             className="nav-search"
           />
           <Chip color="primary" variant="flat" className="role-chip">

@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import { FiBookOpen } from 'react-icons/fi';
 import { knowledgeArticles } from '../data/mockData';
 
 const KnowledgeArticlePage = () => {
@@ -116,7 +117,7 @@ const KnowledgeArticlePage = () => {
               {related.map((item) => (
                 <div key={item.id} className="timeline-item">
                   <div className="icon" aria-hidden>
-                    📚
+                    <FiBookOpen size={16} />
                   </div>
                   <div>
                     <p style={{ margin: 0 }}>{item.title}</p>
