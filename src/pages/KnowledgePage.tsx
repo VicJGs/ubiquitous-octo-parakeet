@@ -336,6 +336,7 @@ const KnowledgePage = () => {
           </div>
         </div>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };

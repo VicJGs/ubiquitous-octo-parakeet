@@ -7,11 +7,15 @@ import TaskCreationPage from './pages/TaskCreationPage';
 import TasksPage from './pages/TasksPage';
 import TaskDetailPage from './pages/TaskDetailPage';
 import WorkflowDesignerPage from './pages/WorkflowDesignerPage';
+import WorkflowsPage from './pages/WorkflowsPage';
 import KnowledgePage from './pages/KnowledgePage';
 import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
 import KnowledgeEditorPage from './pages/KnowledgeEditorPage';
 import ProfilePage from './pages/ProfilePage';
+import UserPermissionsPage from './pages/UserPermissionsPage';
 import MainPage from './pages/MainPage';
+import SettingsPage from './pages/SettingsPage';
+import UserPermissionsPage from './pages/UserPermissionsPage';
 
 const App = () => (
   <AppShell>
@@ -23,12 +27,18 @@ const App = () => (
       <Route path="/workspaces/:id" element={<WorkspaceDetailPage />} />
       <Route path="/tasks/create" element={<TaskCreationPage />} />
       <Route path="/tasks" element={<TasksPage />} />
+      <Route path="/tasks/all" element={<TasksPage />} />
       <Route path="/tasks/:id" element={<TaskDetailPage />} />
+      <Route path="/workflows" element={<WorkflowsPage />} />
       <Route path="/workflow-designer" element={<WorkflowDesignerPage />} />
+      <Route path="/workflows" element={<WorkflowDesignerPage />} />
       <Route path="/knowledge" element={<KnowledgePage />} />
+      <Route path="/knowledge/all" element={<KnowledgePage />} />
       <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
       <Route path="/knowledge/editor" element={<KnowledgeEditorPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/admin/users" element={<UserPermissionsPage />} />
     </Routes>
   </AppShell>
 );
