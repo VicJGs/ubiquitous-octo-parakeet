@@ -119,7 +119,12 @@ const AppShell = ({ children }: { children: ReactNode }) => {
           </div>
         </div>
         <div className="nav-actions">
-          <Input size="sm" placeholder="Search" startContent={<Search size={16} aria-hidden />} className="nav-search" />
+          <Input
+            size="sm"
+            placeholder="Search"
+            startContent={<span aria-hidden="true">🔍</span>}
+            className="nav-search"
+          />
           <Chip color="primary" variant="flat" className="role-chip">
             {role === 'research' && 'Research' }
             {role === 'dev' && 'Developer'}
@@ -166,17 +171,29 @@ const AppShell = ({ children }: { children: ReactNode }) => {
           {navItems.map((item) => (
             <div key={item.label} className="nav-group">
               {item.to ? (
-                <SidebarLink item={item} collapsed={collapsed} />
+                <NavLink to={item.to} className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <span className="icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <span className="label">{item.label}</span>
+                </NavLink>
               ) : (
                 <div className="nav-label">
-                  <item.icon className="nav-icon" size={18} aria-hidden />
-                  {!collapsed && <span className="label">{item.label}</span>}
+                  <span className="icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  <span className="label">{item.label}</span>
                 </div>
               )}
               {item.children && (
                 <div className="nav-children" role="group" aria-label={`${item.label} items`}>
                   {item.children.map((child) => (
-                    <SidebarLink key={child.label} item={child} isChild collapsed={collapsed} />
+                    <NavLink key={child.to} to={child.to} className={({ isActive }) => (isActive ? 'active' : '')}>
+                      <span className="icon" aria-hidden="true">
+                        {child.icon}
+                      </span>
+                      <span className="label">{child.label}</span>
+                    </NavLink>
                   ))}
                 </div>
               )}
