@@ -168,6 +168,7 @@ button:disabled,
   height: 100vh;
   background: var(--bg);
   transition: grid-template-columns 0.2s ease;
+  overflow: hidden;
 }
 
 .app-shell.collapsed {
@@ -187,7 +188,12 @@ button:disabled,
 .topbar {
   flex: 0 0 auto;
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
 }
 
 .app-navbar {
