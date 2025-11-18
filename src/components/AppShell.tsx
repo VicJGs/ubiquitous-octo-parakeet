@@ -18,7 +18,8 @@ const navHierarchy: Record<Role, { label: string; to?: string; icon: string; chi
         { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
-    { label: 'Settings', to: '/profile', icon: '⚙️' }
+    { label: 'Profile', to: '/profile', icon: '👤' },
+    { label: 'Settings', to: '/settings', icon: '⚙️' }
   ],
   dev: [
     { label: 'Main page', to: '/home', icon: '🏠' },
@@ -35,7 +36,8 @@ const navHierarchy: Record<Role, { label: string; to?: string; icon: string; chi
     { label: 'All Workflows', to: '/workflow-designer', icon: '🌐' },
     { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
     { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Settings', to: '/profile', icon: '⚙️' }
+    { label: 'Profile', to: '/profile', icon: '👤' },
+    { label: 'Settings', to: '/settings', icon: '⚙️' }
   ],
   admin: [
     { label: 'Main page', to: '/home', icon: '🏠' },
@@ -52,8 +54,9 @@ const navHierarchy: Record<Role, { label: string; to?: string; icon: string; chi
     { label: 'All Workflows', to: '/workflow-designer', icon: '🌐' },
     { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
     { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Settings', to: '/profile', icon: '⚙️' },
-    { label: 'User permissions', to: '/profile', icon: '🛡️' }
+    { label: 'Profile', to: '/profile', icon: '👤' },
+    { label: 'Settings', to: '/settings', icon: '⚙️' },
+    { label: 'User permissions', to: '/admin/users', icon: '🛡️' }
   ]
 };
 
