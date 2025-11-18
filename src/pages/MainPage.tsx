@@ -108,7 +108,7 @@ const MainPage = () => {
           {filtered.map((ws) => (
             <Card key={ws.id} className="workspace-card">
               <CardHeader className="workspace-card__header">
-                <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden>
+                <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden="true">
                   {ws.icon}
                 </div>
                 <div>
