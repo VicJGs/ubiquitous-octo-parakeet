@@ -69,6 +69,7 @@ body {
   background-color: var(--background);
   color: var(--text-color);
   transition: background-color 0.2s ease, color 0.2s ease;
+  overflow: hidden;
 }
 
 a:focus-visible,
@@ -162,34 +163,53 @@ button:disabled,
 
 .app-shell {
   display: grid;
-  grid-template-areas:
-    'navbar navbar'
-    'sidebar main';
-  grid-template-columns: 280px 1fr;
-  grid-template-rows: auto 1fr;
-  min-height: 100vh;
+  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  height: 100vh;
   background: var(--bg);
   transition: grid-template-columns 0.2s ease;
 }
 
 .app-shell.collapsed {
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 96px minmax(0, 1fr);
+}
+
+.main-area {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg);
+  min-height: 0;
+}
+
+.topbar {
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
 }
 
 .app-navbar {
-  grid-area: navbar;
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
 .brand-mark {
@@ -225,24 +245,28 @@ button:disabled,
 }
 
 .nav-actions {
+  display: flex;
+  align-items: center;
   gap: 0.75rem;
 }
 
-.sidebar-panel {
-  grid-area: sidebar;
-  background: var(--sidebar);
-  border-right: 1px solid var(--border);
-  padding: 1.5rem;
+
+.sidebar {
+  grid-column: 1;
+  grid-row: 1 / -1;
   background: var(--subtle-surface);
+  border-right: 1px solid var(--border);
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  position: sticky;
-  top: 64px;
-  height: calc(100vh - 64px);
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  min-width: 0;
 }
 
-.sidebar-panel.collapsed {
+.sidebar.collapsed {
   align-items: center;
 }
 
@@ -251,6 +275,12 @@ button:disabled,
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+}
+
+.sidebar-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
 .role-switcher {
@@ -268,6 +298,14 @@ button:disabled,
   padding: 0.65rem 0.8rem;
   border-radius: 0.75rem;
   transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  color: inherit;
 }
 
 .sidebar-nav {
@@ -292,6 +330,24 @@ button:disabled,
   gap: 0.25rem;
 }
 
+.nav-group > a.active,
+.nav-group > a:hover {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+}
+
+.app-shell.collapsed .sidebar-nav {
+  align-items: center;
+}
+
+.app-shell.collapsed .sidebar .label {
+  display: none;
+}
+
+.app-shell.collapsed .nav-children {
+  padding-left: 0;
+}
+
 .nav-label {
   display: flex;
   align-items: center;
@@ -306,6 +362,23 @@ button:disabled,
 .nav-children a:hover {
   background: rgba(79, 70, 229, 0.1);
   color: var(--primary);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.workspace-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-title {
+  margin: 0 0 0.65rem;
+  font-weight: 700;
 }
 
 .sidebar-link {
@@ -875,10 +948,23 @@ main {
   gap: 0.5rem;
 }
 
-.app-content {
-  grid-area: main;
+.app-main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.5rem 1.5rem;
+  min-height: 0;
   background: var(--bg);
-  min-height: 100%;
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
 }
 
 .workspace-metrics {
@@ -1661,8 +1747,17 @@ details {
     grid-column: 1;
   }
   .sidebar {
+    grid-row: 1;
+    grid-column: 1;
     flex-direction: row;
     overflow-x: auto;
+    height: auto;
+  }
+  .main-area {
+    grid-column: 1;
+    grid-row: 2;
+    height: auto;
+    overflow: visible;
   }
   .grid-two {
     grid-template-columns: 1fr;
