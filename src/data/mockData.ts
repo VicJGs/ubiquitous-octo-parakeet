@@ -57,7 +57,8 @@ export const workspaces = [
     members: 32,
     activeTasks: 8,
     workflows: 11,
-    lastActivity: '2 hours ago'
+    lastActivity: '2 hours ago',
+    tags: ['intelligence', 'research', 'policy']
   },
   {
     id: 'nova',
@@ -68,7 +69,44 @@ export const workspaces = [
     members: 14,
     activeTasks: 5,
     workflows: 4,
-    lastActivity: '34 minutes ago'
+    lastActivity: '34 minutes ago',
+    tags: ['technology', 'prototyping', 'ai']
+  },
+  {
+    id: 'civic',
+    name: 'Civic Lens',
+    description: 'Policy tracking, stakeholder updates, and decision briefs.',
+    icon: '🏛️',
+    color: '#f97316',
+    members: 21,
+    activeTasks: 6,
+    workflows: 7,
+    lastActivity: '18 minutes ago',
+    tags: ['policy', 'civic', 'briefs']
+  },
+  {
+    id: 'riskops',
+    name: 'RiskOps',
+    description: 'Operational risk modeling with automated monitoring.',
+    icon: '⧉',
+    color: '#10b981',
+    members: 17,
+    activeTasks: 9,
+    workflows: 12,
+    lastActivity: 'Yesterday',
+    tags: ['risk', 'operations', 'monitoring']
+  },
+  {
+    id: 'datalab',
+    name: 'DataLab',
+    description: 'Data product R&D, evaluations, and documentation.',
+    icon: '◉',
+    color: '#a855f7',
+    members: 11,
+    activeTasks: 3,
+    workflows: 5,
+    lastActivity: '3 hours ago',
+    tags: ['data', 'documentation', 'evaluation']
   }
 ];
 
