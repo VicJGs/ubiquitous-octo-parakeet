@@ -10,6 +10,7 @@ import WorkflowDesignerPage from './pages/WorkflowDesignerPage';
 import WorkflowsPage from './pages/WorkflowsPage';
 import KnowledgePage from './pages/KnowledgePage';
 import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
+import KnowledgeEditorPage from './pages/KnowledgeEditorPage';
 import ProfilePage from './pages/ProfilePage';
 import UserPermissionsPage from './pages/UserPermissionsPage';
 import MainPage from './pages/MainPage';
@@ -34,6 +35,7 @@ const App = () => (
       <Route path="/knowledge" element={<KnowledgePage />} />
       <Route path="/knowledge/all" element={<KnowledgePage />} />
       <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
+      <Route path="/knowledge/editor" element={<KnowledgeEditorPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/admin/users" element={<UserPermissionsPage />} />
