@@ -1,3 +1,5 @@
+import { FiShield } from 'react-icons/fi';
+
 const users = [
   { name: 'Nova Liang', role: 'Admin', workspaces: 'Atlas Research, Nova Labs', status: 'Active' },
   { name: 'Priya Raman', role: 'Maintainer', workspaces: 'Atlas Research', status: 'Active' },
@@ -175,7 +177,7 @@ const UserPermissionsPage = () => {
           {auditLog.map((entry) => (
             <div className="timeline-item" key={entry.action}>
               <div className="icon" aria-hidden>
-                🛡️
+                <FiShield size={16} />
               </div>
               <div>
                 <p className="update-title">{entry.action}</p>

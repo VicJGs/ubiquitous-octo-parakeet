@@ -19,6 +19,13 @@ const results = [
   { title: 'Knowledge article', status: 'Pending', description: 'Auto-generated article for the research library.' }
 ];
 
+const renderStatusIcon = (status: string) => {
+  if (status === 'Completed') return <CheckCircle2 size={18} />;
+  if (status === 'Running') return <Zap size={18} />;
+  if (status === 'Pending') return <Hourglass size={18} />;
+  return <CircleOff size={18} />;
+};
+
 const TaskDetailPage = () => {
   const { id } = useParams();
   const task = tasks.find((t) => t.id === id) ?? tasks[0];
@@ -72,7 +79,7 @@ const TaskDetailPage = () => {
                   {phases.map((phase) => (
                     <div className="timeline-item" key={phase.name}>
                       <span className="icon">
-                        {phase.status === 'Completed' ? '✅' : phase.status === 'Running' ? '⚡️' : '⏳'}
+                        {renderStatusIcon(phase.status)}
                       </span>
                       <div>
                         <p>
@@ -105,10 +112,7 @@ const TaskDetailPage = () => {
                 {phases.map((phase) => (
                   <div key={phase.name} className="timeline-item">
                     <span className="icon" aria-hidden>
-                      {phase.status === 'Completed' && <CheckCircle2 size={18} />}
-                      {phase.status === 'Running' && <Zap size={18} />}
-                      {phase.status === 'Pending' && <Hourglass size={18} />}
-                      {!['Completed', 'Running', 'Pending'].includes(phase.status) && <CircleOff size={18} />}
+                      {renderStatusIcon(phase.status)}
                     </span>
                     <div>
                       <p style={{ margin: 0 }}>
