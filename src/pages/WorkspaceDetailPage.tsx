@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import { Pin } from 'lucide-react';
 import { workspaces, activityFeed } from '../data/mockData';
 
 const WorkspaceDetailPage = () => {
@@ -70,7 +71,9 @@ const WorkspaceDetailPage = () => {
         <div className="timeline">
           {activityFeed.map((activity) => (
             <div key={activity.id} className="timeline-item">
-              <span className="icon">📌</span>
+              <span className="icon" aria-hidden>
+                <Pin size={18} />
+              </span>
               <div>
                 <p>
                   <strong>{activity.user}</strong> {activity.description}

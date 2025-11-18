@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { BookOpen, CheckCircle2, Cog, Workflow } from 'lucide-react';
 import { activityFeed, quickActions, upcomingItems } from '../data/mockData';
 
 const metricCards = [
@@ -41,15 +42,18 @@ const DashboardPage = () => {
               <button className="ghost">All workspaces</button>
             </div>
           </div>
-          <div className="timeline">
-            {activityFeed.map((activity) => (
-              <div className="timeline-item" key={activity.id}>
-                <span className="icon" aria-hidden="true">
-                  {activity.type === 'workflow' ? '⚙️' : activity.type === 'knowledge' ? '📚' : '✅'}
-                </span>
-                <div>
-                  <p>
-                    <strong>{activity.user}</strong> {activity.description}
+            <div className="timeline">
+              {activityFeed.map((activity) => (
+                <div className="timeline-item" key={activity.id}>
+                  <span className="icon" aria-hidden="true">
+                    {activity.type === 'workflow' && <Workflow size={18} />}
+                    {activity.type === 'knowledge' && <BookOpen size={18} />}
+                    {activity.type === 'validation' && <CheckCircle2 size={18} />}
+                    {!['workflow', 'knowledge', 'validation'].includes(activity.type) && <Cog size={18} />}
+                  </span>
+                  <div>
+                    <p>
+                      <strong>{activity.user}</strong> {activity.description}
                   </p>
                   <p className="workspace">
                     {activity.workspace} · {activity.timestamp}

@@ -1,8 +1,14 @@
 import { useMemo, useState } from 'react';
 import { Button, Card, CardBody, CardHeader, Chip, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
+import { Network, Sparkles, Search } from 'lucide-react';
 import { workspaces } from '../data/mockData';
 
 const environmentName = 'SageScope Environment';
+
+const workspaceIcons = {
+  atlas: <Network size={18} aria-hidden />,
+  nova: <Sparkles size={18} aria-hidden />
+};
 
 const MainPage = () => {
   const [query, setQuery] = useState('');
@@ -100,7 +106,7 @@ const MainPage = () => {
             placeholder="Search workspaces..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            startContent={<span role="img" aria-label="search">🔍</span>}
+            startContent={<Search size={18} aria-hidden />}
           />
           <Button variant="flat">View all</Button>
         </div>
@@ -109,7 +115,7 @@ const MainPage = () => {
             <Card key={ws.id} className="workspace-card">
               <CardHeader className="workspace-card__header">
                 <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden>
-                  {ws.icon}
+                  {workspaceIcons[ws.id as keyof typeof workspaceIcons] ?? <Network size={18} />}
                 </div>
                 <div>
                   <p className="eyebrow">{ws.lastActivity}</p>

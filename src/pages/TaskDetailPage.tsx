@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { CircleOff, CheckCircle2, Hourglass, Zap } from 'lucide-react';
 import { tasks } from '../data/mockData';
 
 const phases = [
@@ -45,7 +46,12 @@ const TaskDetailPage = () => {
             <div className="timeline">
               {phases.map((phase) => (
                 <div className="timeline-item" key={phase.name}>
-                  <span className="icon">{phase.status === 'Completed' ? '✅' : phase.status === 'Running' ? '⚡️' : '⏳'}</span>
+                  <span className="icon" aria-hidden>
+                    {phase.status === 'Completed' && <CheckCircle2 size={18} />}
+                    {phase.status === 'Running' && <Zap size={18} />}
+                    {phase.status === 'Pending' && <Hourglass size={18} />}
+                    {!['Completed', 'Running', 'Pending'].includes(phase.status) && <CircleOff size={18} />}
+                  </span>
                   <div>
                     <p>
                       <strong>{phase.name}</strong> · {phase.status}

@@ -1,59 +1,84 @@
 import { ReactNode, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Chip, Divider, Input, Spacer, User } from '@heroui/react';
+import {
+  BarChart3,
+  BookOpen,
+  CheckSquare,
+  Compass,
+  FileText,
+  Folder,
+  Globe2,
+  Home,
+  LayoutDashboard,
+  Network,
+  Search,
+  Settings,
+  Shield,
+  Workflow
+} from 'lucide-react';
 import GlobalStatsBar from './GlobalStatsBar';
 
 type Role = 'research' | 'dev' | 'admin';
 
-const navHierarchy: Record<Role, { label: string; to?: string; icon: string; children?: { label: string; to: string; icon: string }[] }[]> = {
+type NavItem = {
+  label: string;
+  to?: string;
+  icon: ReactNode;
+  children?: (Omit<NavItem, 'children'> & { to: string })[];
+};
+
+const iconProps = { size: 18, strokeWidth: 1.75, 'aria-hidden': true };
+
+const navHierarchy: Record<Role, NavItem[]> = {
   research: [
-    { label: 'Main page', to: '/home', icon: '🏠' },
-    { label: 'Dashboard', to: '/dashboard', icon: '📊' },
+    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...iconProps} /> },
     {
       label: 'My Workspaces',
-      icon: '🗂️',
+      icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: '🕸️' },
-        { label: 'Tasks', to: '/tasks', icon: '✅' },
-        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
+        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
       ]
     },
-    { label: 'Settings', to: '/profile', icon: '⚙️' }
+    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
   ],
   dev: [
-    { label: 'Main page', to: '/home', icon: '🏠' },
-    { label: 'Dashboard', to: '/dashboard', icon: '📊' },
+    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <BarChart3 {...iconProps} /> },
     {
       label: 'My Workspaces',
-      icon: '🗂️',
+      icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: '🕸️' },
-        { label: 'Tasks', to: '/tasks', icon: '✅' },
-        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
+        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
       ]
     },
-    { label: 'All Workflows', to: '/workflow-designer', icon: '🌐' },
-    { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
-    { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Settings', to: '/profile', icon: '⚙️' }
+    { label: 'All Workflows', to: '/workflow-designer', icon: <Network {...iconProps} /> },
+    { label: 'All Tasks', to: '/tasks', icon: <FileText {...iconProps} /> },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: <Compass {...iconProps} /> },
+    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
   ],
   admin: [
-    { label: 'Main page', to: '/home', icon: '🏠' },
-    { label: 'Dashboard', to: '/dashboard', icon: '📊' },
+    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...iconProps} /> },
     {
       label: 'My Workspaces',
-      icon: '🗂️',
+      icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: '🕸️' },
-        { label: 'Tasks', to: '/tasks', icon: '✅' },
-        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
+        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
       ]
     },
-    { label: 'All Workflows', to: '/workflow-designer', icon: '🌐' },
-    { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
-    { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Settings', to: '/profile', icon: '⚙️' },
-    { label: 'User permissions', to: '/profile', icon: '🛡️' }
+    { label: 'All Workflows', to: '/workflow-designer', icon: <Globe2 {...iconProps} /> },
+    { label: 'All Tasks', to: '/tasks', icon: <FileText {...iconProps} /> },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: <Compass {...iconProps} /> },
+    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> },
+    { label: 'User permissions', to: '/profile', icon: <Shield {...iconProps} /> }
   ]
 };
 
@@ -75,7 +100,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
           </div>
         </div>
         <div className="nav-actions">
-          <Input size="sm" placeholder="Search" startContent={<span aria-hidden>🔍</span>} className="nav-search" />
+          <Input size="sm" placeholder="Search" startContent={<Search size={16} aria-hidden />} className="nav-search" />
           <Chip color="primary" variant="flat" className="role-chip">
             {role === 'research' && 'Research' }
             {role === 'dev' && 'Developer'}

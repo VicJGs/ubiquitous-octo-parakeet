@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom';
+import { Network, Sparkles } from 'lucide-react';
 import { workspaces } from '../data/mockData';
+
+const workspaceIcons = {
+  atlas: <Network size={20} aria-hidden />,
+  nova: <Sparkles size={20} aria-hidden />
+};
 
 const WorkspacesPage = () => {
   return (
@@ -27,7 +33,9 @@ const WorkspacesPage = () => {
         {workspaces.map((workspace) => (
           <Link key={workspace.id} to={`/workspaces/${workspace.id}`} className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.5rem' }}>{workspace.icon}</span>
+              <span aria-hidden>
+                {workspaceIcons[workspace.id as keyof typeof workspaceIcons] ?? <Network size={20} />}
+              </span>
               <div>
                 <p style={{ margin: 0, fontWeight: 600 }}>{workspace.name}</p>
                 <p className="workspace" style={{ margin: 0 }}>
