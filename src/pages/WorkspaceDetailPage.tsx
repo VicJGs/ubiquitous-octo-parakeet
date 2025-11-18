@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { workspaces, activityFeed } from '../data/mockData';
+import { EmptyState, ErrorToast, SkeletonList } from '../components/AsyncStates';
+import { mockData } from '../data/mockData';
+import { useMockedData } from '../hooks/useMockedData';
 
 const WorkspaceDetailPage = () => {
   const { id } = useParams();
@@ -162,7 +164,7 @@ const WorkspaceDetailPage = () => {
           <button className="ghost">View all</button>
         </div>
         <div className="timeline">
-          {activityFeed.map((activity) => (
+          {mockData.activityFeed.map((activity) => (
             <div key={activity.id} className="timeline-item">
               <span className="icon">📌</span>
               <div>
@@ -175,6 +177,7 @@ const WorkspaceDetailPage = () => {
           ))}
         </div>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };
