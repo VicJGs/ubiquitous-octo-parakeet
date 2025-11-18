@@ -1,14 +1,22 @@
 import { useMemo, useState } from 'react';
 import { Button, Card, CardBody, CardHeader, Chip, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
+import { Network, Sparkles, Search } from 'lucide-react';
 import { workspaces } from '../data/mockData';
 
 const environmentName = 'SageScope Environment';
 
+const workspaceIcons = {
+  atlas: <Network size={18} aria-hidden />,
+  nova: <Sparkles size={18} aria-hidden />
+};
+
 const MainPage = () => {
+  const { data: workspaceData, loading, error, reload } = useMockedData(() => mockData.workspaces, { failFirst: true });
   const [query, setQuery] = useState('');
+  const workspaces = workspaceData ?? [];
   const filtered = useMemo(
     () => workspaces.filter((ws) => ws.name.toLowerCase().includes(query.toLowerCase())),
-    [query]
+    [query, workspaces]
   );
 
   return (
@@ -19,6 +27,14 @@ const MainPage = () => {
             <p className="eyebrow">Environment</p>
             <h1>{environmentName}</h1>
             <p className="muted">Unified research operating space for your teams and automations.</p>
+            <div className="environment-status">
+              <Chip color="success" variant="flat" size="sm">
+                Operational · All systems healthy
+              </Chip>
+              <Chip color="secondary" variant="flat" size="sm">
+                Updated just now
+              </Chip>
+            </div>
           </div>
           <User
             name="Avery Chen"
@@ -29,6 +45,24 @@ const MainPage = () => {
         <CardBody className="environment-body">
           <Tabs aria-label="Environment tabs" size="md" radius="sm">
             <Tab key="overview" title="Overview">
+              <div className="summary-grid">
+                {summaryTiles.map((tile) => (
+                  <Card key={tile.label} className="summary-tile">
+                    <CardHeader className="summary-tile__header">
+                      <p className="stat-title">{tile.label}</p>
+                      <Chip
+                        size="sm"
+                        color={tile.tone === 'negative' ? 'danger' : tile.tone === 'neutral' ? 'default' : 'success'}
+                        variant="flat"
+                      >
+                        {tile.trend}
+                      </Chip>
+                    </CardHeader>
+                    <CardBody className="stat-value">{tile.value}</CardBody>
+                  </Card>
+                ))}
+              </div>
+              <Divider className="section-divider" />
               <div className="stat-grid">
                 <Card>
                   <CardHeader className="stat-title">Active Workspaces</CardHeader>
@@ -92,17 +126,21 @@ const MainPage = () => {
             <h2>Search, view, and add</h2>
             <p className="muted">Find a workspace quickly or spin up a new one to start collaborating.</p>
           </div>
-          <Button color="primary">Add Workspace</Button>
+          <Button as={Link} to="/workspaces" color="primary">
+            Add Workspace
+          </Button>
         </div>
         <div className="workspace-search__controls">
           <Input
             aria-label="Search workspaces"
-            placeholder="Search workspaces..."
+            placeholder="Search by name, description, or tags"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            startContent={<span role="img" aria-label="search">🔍</span>}
+            startContent={<Search size={18} aria-hidden />}
           />
-          <Button variant="flat">View all</Button>
+          <Button as={Link} to="/workspaces" variant="flat">
+            View all
+          </Button>
         </div>
         <div className="workspace-grid">
           {filtered.map((ws) => (
@@ -137,6 +175,7 @@ const MainPage = () => {
           {filtered.length === 0 && <p className="muted">No workspaces found. Try a different search.</p>}
         </div>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };
