@@ -1,7 +1,11 @@
-import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { workspaces as seedWorkspaces, workspaceTemplates } from '../data/mockData';
-import WorkspaceCreateModal from '../components/WorkspaceCreateModal';
+import { Link } from 'react-router-dom';
+import { Network, Sparkles } from 'lucide-react';
+import { workspaces } from '../data/mockData';
+
+const workspaceIcons = {
+  atlas: <Network size={20} aria-hidden />,
+  nova: <Sparkles size={20} aria-hidden />
+};
 
 const WorkspacesPage = () => {
   const navigate = useNavigate();
@@ -114,22 +118,24 @@ const WorkspacesPage = () => {
         </div>
       </section>
 
-      {isEmpty ? (
-        <section className="card empty-state">
-          <div>
-            <p className="workspace">No matches</p>
-            <h2 style={{ margin: '0 0 0.5rem 0' }}>No workspaces found</h2>
-            <p style={{ maxWidth: 520 }}>
-              Try a different search or start from one of the starter templates to spin up a workspace with
-              predefined structure.
-            </p>
-            <div className="pill-row" style={{ marginBottom: '1rem' }}>
-              <button className="primary" onClick={() => setShowCreate(true)}>
-                Create workspace
-              </button>
-              <button className="ghost" onClick={() => setSearch('')}>
-                Clear search
-              </button>
+      <section className="card-grid">
+        {workspaces.map((workspace) => (
+          <Link key={workspace.id} to={`/workspaces/${workspace.id}`} className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span aria-hidden>
+                {workspaceIcons[workspace.id as keyof typeof workspaceIcons] ?? <Network size={20} />}
+              </span>
+              <div>
+                <p style={{ margin: 0, fontWeight: 600 }}>{workspace.name}</p>
+                <p className="workspace" style={{ margin: 0 }}>
+                  {workspace.members} members · {workspace.activeTasks} active tasks
+                </p>
+              </div>
+            </div>
+            <p>{workspace.description}</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#6b7280' }}>
+              <span>{workspace.workflows} workflows</span>
+              <span>Last activity {workspace.lastActivity}</span>
             </div>
           </div>
           <div className="template-grid">

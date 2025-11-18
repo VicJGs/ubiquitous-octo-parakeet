@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { EmptyState, ErrorToast, SkeletonList } from '../components/AsyncStates';
-import { mockData } from '../data/mockData';
-import { useMockedData } from '../hooks/useMockedData';
+import { Pin } from 'lucide-react';
+import { workspaces, activityFeed } from '../data/mockData';
 
 const WorkspaceDetailPage = () => {
   const { id } = useParams();
@@ -166,7 +165,9 @@ const WorkspaceDetailPage = () => {
         <div className="timeline">
           {mockData.activityFeed.map((activity) => (
             <div key={activity.id} className="timeline-item">
-              <span className="icon">📌</span>
+              <span className="icon" aria-hidden>
+                <Pin size={18} />
+              </span>
               <div>
                 <p>
                   <strong>{activity.user}</strong> {activity.description}

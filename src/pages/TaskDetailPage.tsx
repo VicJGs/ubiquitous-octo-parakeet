@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { CircleOff, CheckCircle2, Hourglass, Zap } from 'lucide-react';
 import { tasks } from '../data/mockData';
 
 const phases = [
@@ -121,22 +122,21 @@ const TaskDetailPage = () => {
                 ))}
               </div>
             </div>
-          )}
-
-          {activeTab === 'Execution Logs' && (
-            <div className="card">
-              <div className="section-header">
-                <h2>Execution logs</h2>
-                <button className="ghost">Export</button>
-              </div>
-              <div className="updates">
-                {executionLogs.map((log) => (
-                  <div key={log.time} className="update-row">
-                    <span className="badge info">{log.time}</span>
-                    <div>
-                      <p className="update-title">{log.message}</p>
-                      <p className="workspace">{log.type}</p>
-                    </div>
+            <div className="timeline">
+              {phases.map((phase) => (
+                <div className="timeline-item" key={phase.name}>
+                  <span className="icon" aria-hidden>
+                    {phase.status === 'Completed' && <CheckCircle2 size={18} />}
+                    {phase.status === 'Running' && <Zap size={18} />}
+                    {phase.status === 'Pending' && <Hourglass size={18} />}
+                    {!['Completed', 'Running', 'Pending'].includes(phase.status) && <CircleOff size={18} />}
+                  </span>
+                  <div>
+                    <p>
+                      <strong>{phase.name}</strong> · {phase.status}
+                    </p>
+                    <p className="workspace">{phase.summary}</p>
+                    <p className="workspace">Duration: {phase.duration}</p>
                   </div>
                 ))}
               </div>

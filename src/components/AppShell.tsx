@@ -1,40 +1,21 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Button, Chip, Divider, Input, Spacer, User } from '@heroui/react';
 import {
-  Button,
-  Card,
-  CardBody,
-  Chip,
-  Divider,
-  Input,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Spacer,
-  Switch,
-  Tooltip,
-  User,
-} from '@heroui/react';
-import type { LucideIcon } from 'lucide-react';
-import {
+  BarChart3,
   BookOpen,
   CheckSquare,
-  ChevronLeft,
-  ChevronRight,
   Compass,
-  FolderKanban,
+  FileText,
+  Folder,
   Globe2,
   Home,
   LayoutDashboard,
-  LayoutGrid,
-  ListTodo,
-  Moon,
+  Network,
   Search,
   Settings,
-  ShieldCheck,
-  Sun,
-  Workflow,
+  Shield,
+  Workflow
 } from 'lucide-react';
 import GlobalStatsBar from './GlobalStatsBar';
 
@@ -44,89 +25,62 @@ type ThemeMode = 'light' | 'dark';
 type NavItem = {
   label: string;
   to?: string;
-  icon: LucideIcon;
-  children?: NavItem[];
+  icon: ReactNode;
+  children?: (Omit<NavItem, 'children'> & { to: string })[];
 };
+
+const iconProps = { size: 18, strokeWidth: 1.75, 'aria-hidden': true };
 
 const navHierarchy: Record<Role, NavItem[]> = {
   research: [
-    { label: 'Main page', to: '/home', icon: Home },
-    { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
+    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...iconProps} /> },
     {
       label: 'My Workspaces',
-      icon: FolderKanban,
+      icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: Workflow },
-        { label: 'Tasks', to: '/tasks', icon: CheckSquare },
-        { label: 'Knowledge', to: '/knowledge', icon: BookOpen },
-      ],
+        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
+      ]
     },
-    { label: 'Settings', to: '/profile', icon: Settings },
+    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
   ],
   dev: [
-    { label: 'Main page', to: '/home', icon: Home },
-    { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
+    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <BarChart3 {...iconProps} /> },
     {
       label: 'My Workspaces',
-      icon: FolderKanban,
+      icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: Workflow },
-        { label: 'Tasks', to: '/tasks', icon: CheckSquare },
-        { label: 'Knowledge', to: '/knowledge', icon: BookOpen },
-      ],
+        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
+      ]
     },
-    { label: 'All Workflows', to: '/workflows', icon: Globe2 },
-    { label: 'All Tasks', to: '/tasks/all', icon: ListTodo },
-    { label: 'All Knowledge databases', to: '/knowledge/all', icon: Compass },
-    { label: 'Settings', to: '/profile', icon: Settings },
+    { label: 'All Workflows', to: '/workflow-designer', icon: <Network {...iconProps} /> },
+    { label: 'All Tasks', to: '/tasks', icon: <FileText {...iconProps} /> },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: <Compass {...iconProps} /> },
+    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
   ],
   admin: [
-    { label: 'Main page', to: '/home', icon: Home },
-    { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
+    { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
+    { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard {...iconProps} /> },
     {
       label: 'My Workspaces',
-      icon: FolderKanban,
+      icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: Workflow },
-        { label: 'Tasks', to: '/tasks', icon: CheckSquare },
-        { label: 'Knowledge', to: '/knowledge', icon: BookOpen },
-      ],
+        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
+        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
+        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
+      ]
     },
-    { label: 'All Workflows', to: '/workflows', icon: Globe2 },
-    { label: 'All Tasks', to: '/tasks/all', icon: ListTodo },
-    { label: 'All Knowledge databases', to: '/knowledge/all', icon: Compass },
-    { label: 'User permissions', to: '/user-permissions', icon: ShieldCheck },
-    { label: 'Settings', to: '/profile', icon: Settings },
-  ],
-};
-
-const STORAGE_COLLAPSE_KEY = 'sagescope:sidebar-collapsed';
-const STORAGE_THEME_KEY = 'sagescope:theme';
-
-const cn = (...classes: (string | boolean | undefined)[]) => classes.filter(Boolean).join(' ');
-
-const SidebarLink = ({ item, collapsed, isChild = false }: { item: NavItem; collapsed: boolean; isChild?: boolean }) => {
-  const content = (
-    <NavLink
-      to={item.to || '#'}
-      className={({ isActive }) =>
-        cn('sidebar-link', isChild && 'sidebar-link-child', isActive && 'active', collapsed && 'is-collapsed')
-      }
-    >
-      <item.icon className="nav-icon" size={18} aria-hidden />
-      {!collapsed && <span className="label">{item.label}</span>}
-    </NavLink>
-  );
-
-  if (collapsed) {
-    return (
-      <Tooltip placement="right" content={item.label} closeDelay={0} offset={12}>
-        {content}
-      </Tooltip>
-    );
-  }
-
-  return content;
+    { label: 'All Workflows', to: '/workflow-designer', icon: <Globe2 {...iconProps} /> },
+    { label: 'All Tasks', to: '/tasks', icon: <FileText {...iconProps} /> },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: <Compass {...iconProps} /> },
+    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> },
+    { label: 'User permissions', to: '/profile', icon: <Shield {...iconProps} /> }
+  ]
 };
 
 const AppShell = ({ children }: { children: ReactNode }) => {
@@ -163,48 +117,23 @@ const AppShell = ({ children }: { children: ReactNode }) => {
             <p className="app-name">SageScope</p>
             <p className="workspace">Atlas Research Workspace</p>
           </div>
-        </NavbarBrand>
-        <NavbarContent justify="center" className="navbar-center">
-          <NavbarItem className="navbar-search">
-            <Input
-              aria-label="Search"
-              placeholder="Search workspaces, tasks, or knowledge"
-              startContent={<Search className="muted" size={18} aria-hidden />}
-              size="sm"
-              variant="bordered"
-            />
-          </NavbarItem>
-        </NavbarContent>
-        <NavbarContent justify="end" className="nav-actions">
-          <NavbarItem>
-            <Switch
-              aria-label="Toggle theme"
-              size="sm"
-              color="secondary"
-              isSelected={theme === 'dark'}
-              thumbIcon={({ isSelected }) => (isSelected ? <Moon size={14} /> : <Sun size={14} />)}
-              onChange={(ev) => setTheme(ev.target.checked ? 'dark' : 'light')}
-            />
-          </NavbarItem>
-          <NavbarItem>
-            <Chip color="primary" variant="flat" className="role-chip">
-              {role === 'research' && 'Research'}
-              {role === 'dev' && 'Developer'}
-              {role === 'admin' && 'Admin'}
-            </Chip>
-          </NavbarItem>
-          <NavbarItem>
-            <User
-              name="Nova Liang"
-              description="Lead Researcher"
-              className="nav-user"
-              avatarProps={{ src: 'https://i.pravatar.cc/150?img=12' }}
-            />
-          </NavbarItem>
-        </NavbarContent>
-      </Navbar>
-
-      <aside className={cn('sidebar-panel', collapsed && 'collapsed')} aria-label="Main navigation">
+        </div>
+        <div className="nav-actions">
+          <Input size="sm" placeholder="Search" startContent={<Search size={16} aria-hidden />} className="nav-search" />
+          <Chip color="primary" variant="flat" className="role-chip">
+            {role === 'research' && 'Research' }
+            {role === 'dev' && 'Developer'}
+            {role === 'admin' && 'Admin'}
+          </Chip>
+          <User
+            name="Nova Liang"
+            description="Lead Researcher"
+            className="nav-user"
+            avatarProps={{ src: 'https://i.pravatar.cc/150?img=12' }}
+          />
+        </div>
+      </header>
+      <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-top">
           <Button
             isIconOnly

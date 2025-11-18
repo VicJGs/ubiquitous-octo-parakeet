@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { mockData } from '../data/mockData';
+import { BookOpen, CheckCircle2, Cog, Workflow } from 'lucide-react';
+import { activityFeed, quickActions, upcomingItems } from '../data/mockData';
 
 const metricCards = [
   { label: 'Active Tasks', value: 18, delta: '+12% WoW', trend: 'positive', to: '/tasks' },
@@ -105,21 +106,18 @@ const DashboardPage = () => {
               </button>
             </div>
           </div>
-          <div className="timeline">
-            {mockData.activityFeed.map((activity) => (
-              <div className="timeline-item" key={activity.id}>
-                <span className="icon" aria-hidden="true">
-                  {activity.type === 'workflow'
-                    ? '⚙️'
-                    : activity.type === 'knowledge'
-                      ? '📚'
-                      : activity.type === 'workspace'
-                        ? '🗂️'
-                        : '✅'}
-                </span>
-                <div>
-                  <p>
-                    <strong>{activity.user}</strong> {activity.description}
+            <div className="timeline">
+              {activityFeed.map((activity) => (
+                <div className="timeline-item" key={activity.id}>
+                  <span className="icon" aria-hidden="true">
+                    {activity.type === 'workflow' && <Workflow size={18} />}
+                    {activity.type === 'knowledge' && <BookOpen size={18} />}
+                    {activity.type === 'validation' && <CheckCircle2 size={18} />}
+                    {!['workflow', 'knowledge', 'validation'].includes(activity.type) && <Cog size={18} />}
+                  </span>
+                  <div>
+                    <p>
+                      <strong>{activity.user}</strong> {activity.description}
                   </p>
                   <p className="workspace">
                     <Link to={`/workspaces/${activity.workspaceId}`} className="workspace-link">
