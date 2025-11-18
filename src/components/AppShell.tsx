@@ -39,9 +39,10 @@ const navHierarchy: Record<Role, NavItem[]> = {
       label: 'My Workspaces',
       icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
-        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
-        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
+        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
+        { label: 'Tasks', to: '/tasks', icon: '✅' },
+        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
     { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
@@ -53,15 +54,16 @@ const navHierarchy: Record<Role, NavItem[]> = {
       label: 'My Workspaces',
       icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
-        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
-        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
+        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
+        { label: 'Tasks', to: '/tasks', icon: '✅' },
+        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
-    { label: 'All Workflows', to: '/workflow-designer', icon: <Network {...iconProps} /> },
-    { label: 'All Tasks', to: '/tasks', icon: <FileText {...iconProps} /> },
-    { label: 'All Knowledge databases', to: '/knowledge', icon: <Compass {...iconProps} /> },
-    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
+    { label: 'All Workflows', to: '/workflows', icon: '🌐' },
+    { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
+    { label: 'Settings', to: '/profile', icon: '⚙️' }
   ],
   admin: [
     { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
@@ -70,16 +72,17 @@ const navHierarchy: Record<Role, NavItem[]> = {
       label: 'My Workspaces',
       icon: <Folder {...iconProps} />,
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: <Workflow {...iconProps} /> },
-        { label: 'Tasks', to: '/tasks', icon: <CheckSquare {...iconProps} /> },
-        { label: 'Knowledge', to: '/knowledge', icon: <BookOpen {...iconProps} /> }
+        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
+        { label: 'Tasks', to: '/tasks', icon: '✅' },
+        { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
-    { label: 'All Workflows', to: '/workflow-designer', icon: <Globe2 {...iconProps} /> },
-    { label: 'All Tasks', to: '/tasks', icon: <FileText {...iconProps} /> },
-    { label: 'All Knowledge databases', to: '/knowledge', icon: <Compass {...iconProps} /> },
-    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> },
-    { label: 'User permissions', to: '/profile', icon: <Shield {...iconProps} /> }
+    { label: 'All Workflows', to: '/workflows', icon: '🌐' },
+    { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
+    { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
+    { label: 'Settings', to: '/profile', icon: '⚙️' },
+    { label: 'User permissions', to: '/profile', icon: '🛡️' }
   ]
 };
 

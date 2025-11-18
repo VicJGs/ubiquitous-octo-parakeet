@@ -7,6 +7,7 @@ import TaskCreationPage from './pages/TaskCreationPage';
 import TasksPage from './pages/TasksPage';
 import TaskDetailPage from './pages/TaskDetailPage';
 import WorkflowDesignerPage from './pages/WorkflowDesignerPage';
+import WorkflowsPage from './pages/WorkflowsPage';
 import KnowledgePage from './pages/KnowledgePage';
 import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
 import ProfilePage from './pages/ProfilePage';
@@ -25,6 +26,7 @@ const App = () => (
       <Route path="/tasks" element={<TasksPage />} />
       <Route path="/tasks/all" element={<TasksPage />} />
       <Route path="/tasks/:id" element={<TaskDetailPage />} />
+      <Route path="/workflows" element={<WorkflowsPage />} />
       <Route path="/workflow-designer" element={<WorkflowDesignerPage />} />
       <Route path="/workflows" element={<WorkflowDesignerPage />} />
       <Route path="/knowledge" element={<KnowledgePage />} />
