@@ -13,7 +13,8 @@ const navHierarchy: Record<Role, { label: string; to?: string; icon: string; chi
       label: 'My Workspaces',
       icon: '🗂️',
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: '🕸️' },
+        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
         { label: 'Tasks', to: '/tasks', icon: '✅' },
         { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
@@ -27,12 +28,13 @@ const navHierarchy: Record<Role, { label: string; to?: string; icon: string; chi
       label: 'My Workspaces',
       icon: '🗂️',
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: '🕸️' },
+        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
         { label: 'Tasks', to: '/tasks', icon: '✅' },
         { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
-    { label: 'All Workflows', to: '/workflow-designer', icon: '🌐' },
+    { label: 'All Workflows', to: '/workflows', icon: '🌐' },
     { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
     { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
     { label: 'Settings', to: '/profile', icon: '⚙️' }
@@ -44,12 +46,13 @@ const navHierarchy: Record<Role, { label: string; to?: string; icon: string; chi
       label: 'My Workspaces',
       icon: '🗂️',
       children: [
-        { label: 'Workflows', to: '/workflow-designer', icon: '🕸️' },
+        { label: 'Workflows', to: '/workflows', icon: '🕸️' },
+        { label: 'Workflow Designer', to: '/workflow-designer', icon: '🎛️' },
         { label: 'Tasks', to: '/tasks', icon: '✅' },
         { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
-    { label: 'All Workflows', to: '/workflow-designer', icon: '🌐' },
+    { label: 'All Workflows', to: '/workflows', icon: '🌐' },
     { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
     { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
     { label: 'Settings', to: '/profile', icon: '⚙️' },

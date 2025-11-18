@@ -119,3 +119,66 @@ export const knowledgeArticles = [
     lastUpdated: '5 days ago'
   }
 ];
+
+export const workflows = [
+  {
+    id: 'wf-01',
+    name: 'Market Pulse Aggregator',
+    workspace: 'Nova Labs',
+    status: 'Published',
+    owner: 'Avery Chen',
+    runs: 128,
+    lastRun: '2024-03-05T14:22:00Z',
+    updatedAt: '2024-03-05T13:00:00Z',
+    tags: ['News', 'Signals'],
+    description: 'Ingests market feeds, scores signals, and posts insights to analysts.'
+  },
+  {
+    id: 'wf-02',
+    name: 'Supply Chain Stress Test',
+    workspace: 'Atlas Research',
+    status: 'Running',
+    owner: 'Priya Kumar',
+    runs: 42,
+    lastRun: '2024-03-05T14:55:00Z',
+    updatedAt: '2024-03-05T14:55:00Z',
+    tags: ['Risk', 'Simulation'],
+    description: 'Simulates cascading vendor risks across multiple geographies.'
+  },
+  {
+    id: 'wf-03',
+    name: 'Policy Tracker',
+    workspace: 'Atlas Research',
+    status: 'Draft',
+    owner: 'Nova Liang',
+    runs: 5,
+    lastRun: '2024-03-04T19:10:00Z',
+    updatedAt: '2024-03-04T19:10:00Z',
+    tags: ['Policy', 'Monitoring'],
+    description: 'Aggregates policy updates and routes to review queues.'
+  },
+  {
+    id: 'wf-04',
+    name: 'Synthetic Data Blueprint',
+    workspace: 'Nova Labs',
+    status: 'Published',
+    owner: 'Samira Patel',
+    runs: 67,
+    lastRun: '2024-03-05T10:40:00Z',
+    updatedAt: '2024-03-05T11:05:00Z',
+    tags: ['Data', 'Automation'],
+    description: 'Guides dataset synthesis with validation and approvals.'
+  },
+  {
+    id: 'wf-05',
+    name: 'Incident Comms Router',
+    workspace: 'Civic Lens',
+    status: 'Running',
+    owner: 'Riley Ortiz',
+    runs: 18,
+    lastRun: '2024-03-05T15:05:00Z',
+    updatedAt: '2024-03-05T15:05:00Z',
+    tags: ['Alerts', 'Comms'],
+    description: 'Routes validated incidents to the right responder channels.'
+  }
+];
