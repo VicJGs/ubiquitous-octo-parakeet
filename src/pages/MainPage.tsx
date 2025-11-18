@@ -1,14 +1,54 @@
-import { useMemo, useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Chip, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
-import { workspaces } from '../data/mockData';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Divider,
+  Input,
+  Skeleton,
+  Spacer,
+  Tab,
+  Tabs,
+  User
+} from '@heroui/react';
+import { activityFeed, upcomingItems, workspaces } from '../data/mockData';
 
 const environmentName = 'SageScope Environment';
 
+const summaryTiles = [
+  { label: 'Workspaces', value: 18, trend: '+8% vs last week', tone: 'positive' },
+  { label: 'Tasks', value: 124, trend: '+14% vs last week', tone: 'positive' },
+  { label: 'Workflows', value: 52, trend: '−3% vs last week', tone: 'negative' },
+  { label: 'Knowledge', value: 642, trend: '+21 articles added', tone: 'positive' },
+  { label: 'Active users', value: 86, trend: '3 new invites', tone: 'neutral' }
+];
+
 const MainPage = () => {
   const [query, setQuery] = useState('');
+  const [loadingActivity, setLoadingActivity] = useState(true);
+  const [loadingUpcoming, setLoadingUpcoming] = useState(true);
+
+  useEffect(() => {
+    const activityTimer = setTimeout(() => setLoadingActivity(false), 500);
+    const upcomingTimer = setTimeout(() => setLoadingUpcoming(false), 650);
+
+    return () => {
+      clearTimeout(activityTimer);
+      clearTimeout(upcomingTimer);
+    };
+  }, []);
+
+  const normalizedQuery = query.trim().toLowerCase();
   const filtered = useMemo(
-    () => workspaces.filter((ws) => ws.name.toLowerCase().includes(query.toLowerCase())),
-    [query]
+    () =>
+      workspaces.filter((ws) =>
+        [ws.name, ws.description, ...ws.tags]
+          .filter(Boolean)
+          .some((field) => field.toLowerCase().includes(normalizedQuery))
+      ),
+    [normalizedQuery]
   );
 
   return (
@@ -19,6 +59,14 @@ const MainPage = () => {
             <p className="eyebrow">Environment</p>
             <h1>{environmentName}</h1>
             <p className="muted">Unified research operating space for your teams and automations.</p>
+            <div className="environment-status">
+              <Chip color="success" variant="flat" size="sm">
+                Operational · All systems healthy
+              </Chip>
+              <Chip color="secondary" variant="flat" size="sm">
+                Updated just now
+              </Chip>
+            </div>
           </div>
           <User
             name="Avery Chen"
@@ -29,6 +77,24 @@ const MainPage = () => {
         <CardBody className="environment-body">
           <Tabs aria-label="Environment tabs" size="md" radius="sm">
             <Tab key="overview" title="Overview">
+              <div className="summary-grid">
+                {summaryTiles.map((tile) => (
+                  <Card key={tile.label} className="summary-tile">
+                    <CardHeader className="summary-tile__header">
+                      <p className="stat-title">{tile.label}</p>
+                      <Chip
+                        size="sm"
+                        color={tile.tone === 'negative' ? 'danger' : tile.tone === 'neutral' ? 'default' : 'success'}
+                        variant="flat"
+                      >
+                        {tile.trend}
+                      </Chip>
+                    </CardHeader>
+                    <CardBody className="stat-value">{tile.value}</CardBody>
+                  </Card>
+                ))}
+              </div>
+              <Divider className="section-divider" />
               <div className="stat-grid">
                 <Card>
                   <CardHeader className="stat-title">Active Workspaces</CardHeader>
@@ -92,17 +158,24 @@ const MainPage = () => {
             <h2>Search, view, and add</h2>
             <p className="muted">Find a workspace quickly or spin up a new one to start collaborating.</p>
           </div>
-          <Button color="primary">Add Workspace</Button>
+          <div className="workspace-actions">
+            <Button variant="flat" startContent={<span aria-hidden>📁</span>}>
+              View all
+            </Button>
+            <Button color="primary" startContent={<span aria-hidden>＋</span>}>
+              Add Workspace
+            </Button>
+          </div>
         </div>
         <div className="workspace-search__controls">
           <Input
             aria-label="Search workspaces"
-            placeholder="Search workspaces..."
+            placeholder="Search by name, description, or tags"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             startContent={<span role="img" aria-label="search">🔍</span>}
           />
-          <Button variant="flat">View all</Button>
+          <Button variant="bordered">Filter</Button>
         </div>
         <div className="workspace-grid">
           {filtered.map((ws) => (
@@ -123,6 +196,13 @@ const MainPage = () => {
                   <span>{ws.activeTasks} active tasks</span>
                   <span>{ws.workflows} workflows</span>
                 </div>
+                <div className="workspace-tags">
+                  {ws.tags.map((tag) => (
+                    <Chip key={tag} size="sm" variant="flat" color="default">
+                      {tag}
+                    </Chip>
+                  ))}
+                </div>
                 <div className="workspace-actions">
                   <Button size="sm" variant="flat">
                     View
@@ -137,6 +217,91 @@ const MainPage = () => {
           {filtered.length === 0 && <p className="muted">No workspaces found. Try a different search.</p>}
         </div>
       </section>
+
+      <div className="dashboard-widgets">
+        <Card className="widget-card">
+          <CardHeader className="widget-header">
+            <div>
+              <p className="eyebrow">Activity</p>
+              <h3>Recent activity</h3>
+            </div>
+            <Button size="sm" variant="light">
+              View all
+            </Button>
+          </CardHeader>
+          <CardBody className="widget-body">
+            {loadingActivity && (
+              <div className="skeleton-stack">
+                <Skeleton className="skeleton-line" />
+                <Skeleton className="skeleton-line" />
+                <Skeleton className="skeleton-line" />
+              </div>
+            )}
+            {!loadingActivity && (
+              <div className="updates">
+                {activityFeed.length === 0 && <p className="muted">No activity to display.</p>}
+                {activityFeed.length > 0 &&
+                  activityFeed.map((item) => (
+                    <div key={item.id} className="update-row">
+                      <Chip size="sm" variant="flat" color="primary">
+                        {item.type}
+                      </Chip>
+                      <div>
+                        <p className="update-title">{item.description}</p>
+                        <p className="muted">
+                          {item.workspace} · {item.user} · {item.timestamp}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </CardBody>
+        </Card>
+
+        <Card className="widget-card">
+          <CardHeader className="widget-header">
+            <div>
+              <p className="eyebrow">Schedule</p>
+              <h3>Upcoming items</h3>
+            </div>
+            <Button size="sm" variant="light">
+              Manage
+            </Button>
+          </CardHeader>
+          <CardBody className="widget-body">
+            {loadingUpcoming && (
+              <div className="skeleton-stack">
+                <Skeleton className="skeleton-line" />
+                <Skeleton className="skeleton-line" />
+              </div>
+            )}
+            {!loadingUpcoming && (
+              <div className="stack" style={{ gap: '1rem' }}>
+                {upcomingItems.length === 0 && <p className="muted">Nothing scheduled. Add an item to get started.</p>}
+                {upcomingItems.map((item) => (
+                  <div key={item.id} className="upcoming-item">
+                    <div>
+                      <p className="update-title">{item.name}</p>
+                      <p className="muted">
+                        {item.time} · {item.workspace}
+                      </p>
+                    </div>
+                    <div className="workspace-actions">
+                      <Button size="sm" variant="flat">
+                        Reschedule
+                      </Button>
+                      <Button size="sm" variant="flat" color="danger">
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 };
