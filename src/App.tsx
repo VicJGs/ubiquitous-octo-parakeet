@@ -10,10 +10,13 @@ import WorkflowDesignerPage from './pages/WorkflowDesignerPage';
 import KnowledgePage from './pages/KnowledgePage';
 import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
 import ProfilePage from './pages/ProfilePage';
+import MainPage from './pages/MainPage';
 
 const App = () => (
   <AppShell>
     <Routes>
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="/home" element={<MainPage />} />
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/workspaces" element={<WorkspacesPage />} />
