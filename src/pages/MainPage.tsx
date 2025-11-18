@@ -7,6 +7,14 @@ import { useMockedData } from '../hooks/useMockedData';
 
 const environmentName = 'SageScope Environment';
 
+const summaryTiles = [
+  { label: 'Workspaces', value: 18, trend: '+8% vs last week', tone: 'positive' },
+  { label: 'Tasks', value: 124, trend: '+14% vs last week', tone: 'positive' },
+  { label: 'Workflows', value: 52, trend: '−3% vs last week', tone: 'negative' },
+  { label: 'Knowledge', value: 642, trend: '+21 articles added', tone: 'positive' },
+  { label: 'Active users', value: 86, trend: '3 new invites', tone: 'neutral' }
+];
+
 const MainPage = () => {
   const { data: workspaceData, loading, error, reload } = useMockedData(() => mockData.workspaces, { failFirst: true });
   const [query, setQuery] = useState('');
@@ -24,6 +32,14 @@ const MainPage = () => {
             <p className="eyebrow">Environment</p>
             <h1>{environmentName}</h1>
             <p className="muted">Unified research operating space for your teams and automations.</p>
+            <div className="environment-status">
+              <Chip color="success" variant="flat" size="sm">
+                Operational · All systems healthy
+              </Chip>
+              <Chip color="secondary" variant="flat" size="sm">
+                Updated just now
+              </Chip>
+            </div>
           </div>
           <User
             name="Avery Chen"
@@ -34,6 +50,24 @@ const MainPage = () => {
         <CardBody className="environment-body">
           <Tabs aria-label="Environment tabs" size="md" radius="sm">
             <Tab key="overview" title="Overview">
+              <div className="summary-grid">
+                {summaryTiles.map((tile) => (
+                  <Card key={tile.label} className="summary-tile">
+                    <CardHeader className="summary-tile__header">
+                      <p className="stat-title">{tile.label}</p>
+                      <Chip
+                        size="sm"
+                        color={tile.tone === 'negative' ? 'danger' : tile.tone === 'neutral' ? 'default' : 'success'}
+                        variant="flat"
+                      >
+                        {tile.trend}
+                      </Chip>
+                    </CardHeader>
+                    <CardBody className="stat-value">{tile.value}</CardBody>
+                  </Card>
+                ))}
+              </div>
+              <Divider className="section-divider" />
               <div className="stat-grid">
                 <Card>
                   <CardHeader className="stat-title">Active Workspaces</CardHeader>
@@ -104,7 +138,7 @@ const MainPage = () => {
         <div className="workspace-search__controls">
           <Input
             aria-label="Search workspaces"
-            placeholder="Search workspaces..."
+            placeholder="Search by name, description, or tags"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             startContent={<span role="img" aria-label="search">🔍</span>}

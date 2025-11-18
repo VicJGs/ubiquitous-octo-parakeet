@@ -2,13 +2,56 @@ import { Link } from 'react-router-dom';
 import { mockData } from '../data/mockData';
 
 const metricCards = [
-  { label: 'Active Tasks', value: 18, delta: '+12% WoW' },
-  { label: 'Completed (30d)', value: 54, delta: '+8% MoM' },
-  { label: 'Active Workflows', value: 6, delta: '2 running' },
-  { label: 'Active Workspaces', value: 4, delta: '1 new invite' }
+  { label: 'Active Tasks', value: 18, delta: '+12% WoW', trend: 'positive', to: '/tasks' },
+  { label: 'Completed (30d)', value: 54, delta: '+8% MoM', trend: 'positive', to: '/tasks' },
+  { label: 'Active Workflows', value: 6, delta: '2 running', trend: 'neutral', to: '/workflow-designer' },
+  { label: 'Active Workspaces', value: 4, delta: '1 new invite', trend: 'neutral', to: '/workspaces' }
 ];
 
+const currentWorkspaceId = 'atlas';
+const currentWorkspaceName = 'Atlas Research';
+
 const DashboardPage = () => {
+  const [activityScope, setActivityScope] = useState<'current' | 'all'>('current');
+  const [visibleActivityCount, setVisibleActivityCount] = useState(4);
+  const [scheduleItems, setScheduleItems] = useState<typeof upcomingItems>([]);
+  const [isLoadingSchedule, setIsLoadingSchedule] = useState(true);
+  const [scheduleMessage, setScheduleMessage] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setScheduleItems(upcomingItems);
+      setIsLoadingSchedule(false);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const filteredActivities = useMemo(
+    () =>
+      activityFeed.filter(
+        (activity) => activityScope === 'all' || activity.workspaceId === currentWorkspaceId
+      ),
+    [activityScope]
+  );
+
+  const visibleActivities = filteredActivities.slice(0, visibleActivityCount);
+  const canLoadMore = visibleActivityCount < filteredActivities.length;
+
+  const handleReschedule = (id: string) => {
+    setScheduleItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, time: 'Rescheduled · Tomorrow · 14:00 UTC' } : item
+      )
+    );
+    setScheduleMessage('Item rescheduled. Stakeholders have been notified.');
+  };
+
+  const handleCancel = (id: string) => {
+    setScheduleItems((items) => items.filter((item) => item.id !== id));
+    setScheduleMessage('Item cancelled. Automation paused.');
+  };
+
   return (
     <div className="stack">
       <section className="card">
@@ -19,15 +62,26 @@ const DashboardPage = () => {
           </div>
           <p>{new Date().toLocaleString()}</p>
         </div>
-        <p>Atlas Research workspace · 3 running workflows · Motivation: "Yesterday you cleared 4 tasks"</p>
+        <p>
+          {currentWorkspaceName} workspace · 3 running workflows · Motivation: "Yesterday you cleared 4
+          tasks"
+        </p>
       </section>
 
       <section className="card-grid">
         {metricCards.map((card) => (
-          <Link key={card.label} to="/tasks" className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <p className="stat-label">{card.label}</p>
+          <Link
+            key={card.label}
+            to={card.to}
+            className="card kpi-card"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <div className="kpi-card__header">
+              <p className="stat-label">{card.label}</p>
+              <span className={`trend-badge ${card.trend}`}>{card.delta}</span>
+            </div>
             <p className="stat-value">{card.value}</p>
-            <p className="stat-trend">{card.delta}</p>
+            <p className="stat-trend">Tap to view details</p>
           </Link>
         ))}
       </section>
@@ -37,27 +91,53 @@ const DashboardPage = () => {
           <div className="section-header">
             <h2>Recent Activity</h2>
             <div>
-              <button className="ghost">Current workspace</button>
-              <button className="ghost">All workspaces</button>
+              <button
+                className={`ghost ${activityScope === 'current' ? 'active' : ''}`}
+                onClick={() => setActivityScope('current')}
+              >
+                Current workspace
+              </button>
+              <button
+                className={`ghost ${activityScope === 'all' ? 'active' : ''}`}
+                onClick={() => setActivityScope('all')}
+              >
+                All workspaces
+              </button>
             </div>
           </div>
           <div className="timeline">
             {mockData.activityFeed.map((activity) => (
               <div className="timeline-item" key={activity.id}>
                 <span className="icon" aria-hidden="true">
-                  {activity.type === 'workflow' ? '⚙️' : activity.type === 'knowledge' ? '📚' : '✅'}
+                  {activity.type === 'workflow'
+                    ? '⚙️'
+                    : activity.type === 'knowledge'
+                      ? '📚'
+                      : activity.type === 'workspace'
+                        ? '🗂️'
+                        : '✅'}
                 </span>
                 <div>
                   <p>
                     <strong>{activity.user}</strong> {activity.description}
                   </p>
                   <p className="workspace">
-                    {activity.workspace} · {activity.timestamp}
+                    <Link to={`/workspaces/${activity.workspaceId}`} className="workspace-link">
+                      {activity.workspace}
+                    </Link>{' '}
+                    · {activity.timestamp}
                   </p>
                 </div>
               </div>
             ))}
-            <button className="ghost">Load more</button>
+            {visibleActivities.length === 0 && (
+              <p className="muted">No activity yet. New updates will show up here.</p>
+            )}
+            {filteredActivities.length > 0 && (
+              <button className="ghost" onClick={() => setVisibleActivityCount((count) => count + 3)} disabled={!canLoadMore}>
+                {canLoadMore ? 'Load more' : 'No more activity'}
+              </button>
+            )}
           </div>
         </div>
         <div className="stack" style={{ gap: '1.5rem' }}>
@@ -70,10 +150,14 @@ const DashboardPage = () => {
                 <Link
                   key={action.label}
                   to={action.to}
-                  className={action.accent === 'primary' ? 'primary' : 'secondary'}
+                  className={`quick-action ${action.accent === 'primary' ? 'primary' : 'secondary'}`}
                   style={{ textDecoration: 'none' }}
                 >
-                  {action.label}
+                  <div>
+                    <p className="quick-action__label">{action.label}</p>
+                    <p className="quick-action__description">{action.description}</p>
+                  </div>
+                  <span aria-hidden>→</span>
                 </Link>
               ))}
             </div>
@@ -106,9 +190,13 @@ const DashboardPage = () => {
                       Cancel
                     </Link>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+                {scheduleItems.length === 0 && (
+                  <p className="muted">No items scheduled. Create a workflow run to populate this panel.</p>
+                )}
+                {scheduleMessage && <p className="status-message">{scheduleMessage}</p>}
+              </div>
+            )}
           </div>
         </div>
       </section>
