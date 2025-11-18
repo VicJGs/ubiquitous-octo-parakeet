@@ -1,22 +1,24 @@
 import { useMemo, useState } from 'react';
-import { Button, Card, CardBody, CardHeader, Chip, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
-import { Network, Sparkles, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button, Card, CardBody, CardHeader, Chip, Divider, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
+import { Search } from 'lucide-react';
 import { workspaces } from '../data/mockData';
 
 const environmentName = 'SageScope Environment';
 
-const workspaceIcons = {
-  atlas: <Network size={18} aria-hidden />,
-  nova: <Sparkles size={18} aria-hidden />
-};
+const summaryTiles = [
+  { label: 'Active workspaces', value: '12', trend: '+2 WoW', tone: 'positive' },
+  { label: 'Running tasks', value: '27', trend: 'Stable', tone: 'neutral' },
+  { label: 'Published workflows', value: '44', trend: '+3 this week', tone: 'positive' },
+  { label: 'Knowledge articles', value: '318', trend: '+12 new', tone: 'positive' }
+];
 
 const MainPage = () => {
-  const { data: workspaceData, loading, error, reload } = useMockedData(() => mockData.workspaces, { failFirst: true });
   const [query, setQuery] = useState('');
-  const workspaces = workspaceData ?? [];
+  const workspaceData = workspaces;
   const filtered = useMemo(
-    () => workspaces.filter((ws) => ws.name.toLowerCase().includes(query.toLowerCase())),
-    [query, workspaces]
+    () => workspaceData.filter((ws) => ws.name.toLowerCase().includes(query.toLowerCase())),
+    [query, workspaceData]
   );
 
   return (
@@ -175,7 +177,6 @@ const MainPage = () => {
           {filtered.length === 0 && <p className="muted">No workspaces found. Try a different search.</p>}
         </div>
       </section>
-      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };

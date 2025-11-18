@@ -1,16 +1,19 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Button, Chip, Divider, Input, Spacer, User } from '@heroui/react';
+import { Button, Card, CardBody, Chip, Divider, Input, Navbar, NavbarBrand, Spacer, User } from '@heroui/react';
 import {
   BarChart3,
   BookOpen,
   CheckSquare,
+  ChevronLeft,
+  ChevronRight,
   Compass,
   FileText,
   Folder,
   Globe2,
   Home,
   LayoutDashboard,
+  LayoutGrid,
   Network,
   Search,
   Settings,
@@ -18,6 +21,9 @@ import {
   Workflow
 } from 'lucide-react';
 import GlobalStatsBar from './GlobalStatsBar';
+
+const STORAGE_COLLAPSE_KEY = 'app-shell-collapsed';
+const STORAGE_THEME_KEY = 'app-shell-theme';
 
 type Role = 'research' | 'dev' | 'admin';
 type ThemeMode = 'light' | 'dark';
@@ -113,7 +119,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
   }, [theme]);
 
   return (
-    <div className={cn('app-shell', collapsed && 'collapsed')}>
+    <div className={`app-shell ${collapsed ? 'collapsed' : ''}`}>
       <Navbar isBordered maxWidth="full" className="app-navbar">
         <NavbarBrand className="brand">
           <div className="brand-mark" aria-hidden>
@@ -123,7 +129,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
             <p className="app-name">SageScope</p>
             <p className="workspace">Atlas Research Workspace</p>
           </div>
-        </div>
+        </NavbarBrand>
         <div className="nav-actions">
           <Input
             size="sm"
@@ -132,7 +138,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
             className="nav-search"
           />
           <Chip color="primary" variant="flat" className="role-chip">
-            {role === 'research' && 'Research' }
+            {role === 'research' && 'Research'}
             {role === 'dev' && 'Developer'}
             {role === 'admin' && 'Admin'}
           </Chip>
@@ -143,7 +149,7 @@ const AppShell = ({ children }: { children: ReactNode }) => {
             avatarProps={{ src: 'https://i.pravatar.cc/150?img=12' }}
           />
         </div>
-      </header>
+      </Navbar>
       <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-top">
           <Button

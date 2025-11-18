@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, CheckCircle2, Cog, Workflow } from 'lucide-react';
 import { activityFeed, quickActions, upcomingItems } from '../data/mockData';
@@ -106,18 +107,18 @@ const DashboardPage = () => {
               </button>
             </div>
           </div>
-            <div className="timeline">
-              {activityFeed.map((activity) => (
-                <div className="timeline-item" key={activity.id}>
-                  <span className="icon" aria-hidden="true">
-                    {activity.type === 'workflow' && <Workflow size={18} />}
-                    {activity.type === 'knowledge' && <BookOpen size={18} />}
-                    {activity.type === 'validation' && <CheckCircle2 size={18} />}
-                    {!['workflow', 'knowledge', 'validation'].includes(activity.type) && <Cog size={18} />}
-                  </span>
-                  <div>
-                    <p>
-                      <strong>{activity.user}</strong> {activity.description}
+          <div className="timeline">
+            {visibleActivities.map((activity) => (
+              <div className="timeline-item" key={activity.id}>
+                <span className="icon" aria-hidden="true">
+                  {activity.type === 'workflow' && <Workflow size={18} />}
+                  {activity.type === 'knowledge' && <BookOpen size={18} />}
+                  {activity.type === 'validation' && <CheckCircle2 size={18} />}
+                  {!['workflow', 'knowledge', 'validation'].includes(activity.type) && <Cog size={18} />}
+                </span>
+                <div>
+                  <p>
+                    <strong>{activity.user}</strong> {activity.description}
                   </p>
                   <p className="workspace">
                     <Link to={`/workspaces/${activity.workspaceId}`} className="workspace-link">
@@ -132,7 +133,11 @@ const DashboardPage = () => {
               <p className="muted">No activity yet. New updates will show up here.</p>
             )}
             {filteredActivities.length > 0 && (
-              <button className="ghost" onClick={() => setVisibleActivityCount((count) => count + 3)} disabled={!canLoadMore}>
+              <button
+                className="ghost"
+                onClick={() => setVisibleActivityCount((count) => count + 3)}
+                disabled={!canLoadMore}
+              >
                 {canLoadMore ? 'Load more' : 'No more activity'}
               </button>
             )}
@@ -144,7 +149,7 @@ const DashboardPage = () => {
               <h2>Quick Actions</h2>
             </div>
             <div className="stack" style={{ gap: '0.75rem' }}>
-              {mockData.quickActions.map((action) => (
+              {quickActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.to}
@@ -163,38 +168,33 @@ const DashboardPage = () => {
           <div className="card">
             <div className="section-header">
               <h2>Upcoming & Scheduled</h2>
-              <button className="ghost">Manage</button>
+              <button className="ghost" disabled={isLoadingSchedule}>
+                Manage
+              </button>
             </div>
             <div className="stack" style={{ gap: '1rem' }}>
-              {mockData.schedules.map((item) => (
+              {scheduleItems.map((item) => (
                 <div key={item.id}>
                   <p style={{ margin: 0, fontWeight: 600 }}>{item.name}</p>
                   <p className="workspace" style={{ margin: 0 }}>
                     {item.time} · {item.workspace}
                   </p>
                   <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-                    <Link
-                      to={item.relatedTaskId ? `/tasks/${item.relatedTaskId}` : '/tasks'}
-                      className="ghost"
-                      style={{ textDecoration: 'none' }}
-                    >
+                    <button className="ghost" onClick={() => handleReschedule(item.id)}>
                       Reschedule
-                    </Link>
-                    <Link
-                      to={item.relatedTaskId ? `/tasks/${item.relatedTaskId}` : '/tasks'}
-                      className="ghost"
-                      style={{ textDecoration: 'none' }}
-                    >
+                    </button>
+                    <button className="ghost" onClick={() => handleCancel(item.id)}>
                       Cancel
-                    </Link>
+                    </button>
                   </div>
-                ))}
-                {scheduleItems.length === 0 && (
-                  <p className="muted">No items scheduled. Create a workflow run to populate this panel.</p>
-                )}
-                {scheduleMessage && <p className="status-message">{scheduleMessage}</p>}
-              </div>
-            )}
+                </div>
+              ))}
+              {scheduleItems.length === 0 && !isLoadingSchedule && (
+                <p className="muted">No items scheduled. Create a workflow run to populate this panel.</p>
+              )}
+              {isLoadingSchedule && <p className="muted">Loading schedule…</p>}
+              {scheduleMessage && <p className="status-message">{scheduleMessage}</p>}
+            </div>
           </div>
         </div>
       </section>

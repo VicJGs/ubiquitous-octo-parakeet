@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CircleOff, CheckCircle2, Hourglass, Zap } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
+import { CheckCircle2, CircleOff, Hourglass, Zap } from 'lucide-react';
 import { tasks } from '../data/mockData';
+
+const workspaceName = 'Atlas Research';
 
 const phases = [
   { name: 'Planning', status: 'Completed', duration: '12m', summary: 'Framed objectives and scope.' },
@@ -9,13 +11,6 @@ const phases = [
   { name: 'Analysis', status: 'Running', duration: '8m', summary: 'LLM summarization and scoring in progress.' },
   { name: 'Synthesis', status: 'Pending', duration: '-', summary: 'Awaiting upstream signals.' },
   { name: 'Validation', status: 'Pending', duration: '-', summary: 'Human review pending completion.' }
-];
-
-const executionLogs = [
-  { time: '10:04', message: 'Started workflow "Market Pulse"', type: 'info' },
-  { time: '10:06', message: 'Fetched 12 sources from connectors', type: 'success' },
-  { time: '10:09', message: 'Blocked on policy gating for vendor reports', type: 'warning' },
-  { time: '10:12', message: 'Human approval received, resuming Analysis', type: 'success' }
 ];
 
 const results = [
@@ -76,7 +71,9 @@ const TaskDetailPage = () => {
                 <div className="timeline">
                   {phases.map((phase) => (
                     <div className="timeline-item" key={phase.name}>
-                      <span className="icon">{phase.status === 'Completed' ? '✅' : phase.status === 'Running' ? '⚡️' : '⏳'}</span>
+                      <span className="icon">
+                        {phase.status === 'Completed' ? '✅' : phase.status === 'Running' ? '⚡️' : '⏳'}
+                      </span>
                       <div>
                         <p>
                           <strong>{phase.name}</strong> · {phase.status}
@@ -107,7 +104,12 @@ const TaskDetailPage = () => {
               <div className="timeline">
                 {phases.map((phase) => (
                   <div key={phase.name} className="timeline-item">
-                    <span className="icon">{phase.status === 'Completed' ? '✅' : phase.status === 'Running' ? '⚡️' : '⏳'}</span>
+                    <span className="icon" aria-hidden>
+                      {phase.status === 'Completed' && <CheckCircle2 size={18} />}
+                      {phase.status === 'Running' && <Zap size={18} />}
+                      {phase.status === 'Pending' && <Hourglass size={18} />}
+                      {!['Completed', 'Running', 'Pending'].includes(phase.status) && <CircleOff size={18} />}
+                    </span>
                     <div>
                       <p style={{ margin: 0 }}>
                         <strong>{phase.name}</strong> · {phase.status} · ETA {phase.duration}
@@ -118,25 +120,6 @@ const TaskDetailPage = () => {
                         <span className="badge info">Workflow linked</span>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="timeline">
-              {phases.map((phase) => (
-                <div className="timeline-item" key={phase.name}>
-                  <span className="icon" aria-hidden>
-                    {phase.status === 'Completed' && <CheckCircle2 size={18} />}
-                    {phase.status === 'Running' && <Zap size={18} />}
-                    {phase.status === 'Pending' && <Hourglass size={18} />}
-                    {!['Completed', 'Running', 'Pending'].includes(phase.status) && <CircleOff size={18} />}
-                  </span>
-                  <div>
-                    <p>
-                      <strong>{phase.name}</strong> · {phase.status}
-                    </p>
-                    <p className="workspace">{phase.summary}</p>
-                    <p className="workspace">Duration: {phase.duration}</p>
                   </div>
                 ))}
               </div>
@@ -210,7 +193,6 @@ const TaskDetailPage = () => {
           </div>
         </aside>
       </section>
-      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };
