@@ -10,6 +10,7 @@ import WorkflowDesignerPage from './pages/WorkflowDesignerPage';
 import KnowledgePage from './pages/KnowledgePage';
 import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
 import ProfilePage from './pages/ProfilePage';
+import UserPermissionsPage from './pages/UserPermissionsPage';
 import MainPage from './pages/MainPage';
 
 const App = () => (
@@ -22,11 +23,15 @@ const App = () => (
       <Route path="/workspaces/:id" element={<WorkspaceDetailPage />} />
       <Route path="/tasks/create" element={<TaskCreationPage />} />
       <Route path="/tasks" element={<TasksPage />} />
+      <Route path="/tasks/all" element={<TasksPage />} />
       <Route path="/tasks/:id" element={<TaskDetailPage />} />
       <Route path="/workflow-designer" element={<WorkflowDesignerPage />} />
+      <Route path="/workflows" element={<WorkflowDesignerPage />} />
       <Route path="/knowledge" element={<KnowledgePage />} />
+      <Route path="/knowledge/all" element={<KnowledgePage />} />
       <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/user-permissions" element={<UserPermissionsPage />} />
     </Routes>
   </AppShell>
 );
