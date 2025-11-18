@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, useHref, useNavigate } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
-import App from './App';
 import './styles.css';
+import App from './App';
 
 const AppWithProviders = () => {
   const navigate = useNavigate();
