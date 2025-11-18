@@ -17,6 +17,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<Navigate to="/home" replace />} />
       <Route path="/home" element={<MainPage />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/workspaces" element={<WorkspacesPage />} />
       <Route path="/workspaces/:id" element={<WorkspaceDetailPage />} />
