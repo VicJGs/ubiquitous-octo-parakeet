@@ -13,6 +13,8 @@ import KnowledgeArticlePage from './pages/KnowledgeArticlePage';
 import ProfilePage from './pages/ProfilePage';
 import UserPermissionsPage from './pages/UserPermissionsPage';
 import MainPage from './pages/MainPage';
+import SettingsPage from './pages/SettingsPage';
+import UserPermissionsPage from './pages/UserPermissionsPage';
 
 const App = () => (
   <AppShell>
@@ -33,7 +35,8 @@ const App = () => (
       <Route path="/knowledge/all" element={<KnowledgePage />} />
       <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
       <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/user-permissions" element={<UserPermissionsPage />} />
+      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/admin/users" element={<UserPermissionsPage />} />
     </Routes>
   </AppShell>
 );

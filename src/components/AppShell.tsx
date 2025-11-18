@@ -45,7 +45,8 @@ const navHierarchy: Record<Role, NavItem[]> = {
         { label: 'Knowledge', to: '/knowledge', icon: '📚' }
       ]
     },
-    { label: 'Settings', to: '/profile', icon: <Settings {...iconProps} /> }
+    { label: 'Profile', to: '/profile', icon: '👤' },
+    { label: 'Settings', to: '/settings', icon: '⚙️' }
   ],
   dev: [
     { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
@@ -63,7 +64,8 @@ const navHierarchy: Record<Role, NavItem[]> = {
     { label: 'All Workflows', to: '/workflows', icon: '🌐' },
     { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
     { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Settings', to: '/profile', icon: '⚙️' }
+    { label: 'Profile', to: '/profile', icon: '👤' },
+    { label: 'Settings', to: '/settings', icon: '⚙️' }
   ],
   admin: [
     { label: 'Main page', to: '/home', icon: <Home {...iconProps} /> },
@@ -81,8 +83,9 @@ const navHierarchy: Record<Role, NavItem[]> = {
     { label: 'All Workflows', to: '/workflows', icon: '🌐' },
     { label: 'All Tasks', to: '/tasks', icon: '🗒️' },
     { label: 'All Knowledge databases', to: '/knowledge', icon: '🧭' },
-    { label: 'Settings', to: '/profile', icon: '⚙️' },
-    { label: 'User permissions', to: '/profile', icon: '🛡️' }
+    { label: 'Profile', to: '/profile', icon: '👤' },
+    { label: 'Settings', to: '/settings', icon: '⚙️' },
+    { label: 'User permissions', to: '/admin/users', icon: '🛡️' }
   ]
 };
 
