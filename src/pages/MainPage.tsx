@@ -1,14 +1,19 @@
 import { useMemo, useState } from 'react';
 import { Button, Card, CardBody, CardHeader, Chip, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
-import { workspaces } from '../data/mockData';
+import { Link } from 'react-router-dom';
+import { mockData } from '../data/mockData';
+import { EmptyState, ErrorToast, SkeletonList } from '../components/AsyncStates';
+import { useMockedData } from '../hooks/useMockedData';
 
 const environmentName = 'SageScope Environment';
 
 const MainPage = () => {
+  const { data: workspaceData, loading, error, reload } = useMockedData(() => mockData.workspaces, { failFirst: true });
   const [query, setQuery] = useState('');
+  const workspaces = workspaceData ?? [];
   const filtered = useMemo(
     () => workspaces.filter((ws) => ws.name.toLowerCase().includes(query.toLowerCase())),
-    [query]
+    [query, workspaces]
   );
 
   return (
@@ -92,7 +97,9 @@ const MainPage = () => {
             <h2>Search, view, and add</h2>
             <p className="muted">Find a workspace quickly or spin up a new one to start collaborating.</p>
           </div>
-          <Button color="primary">Add Workspace</Button>
+          <Button as={Link} to="/workspaces" color="primary">
+            Add Workspace
+          </Button>
         </div>
         <div className="workspace-search__controls">
           <Input
@@ -102,41 +109,53 @@ const MainPage = () => {
             onChange={(e) => setQuery(e.target.value)}
             startContent={<span role="img" aria-label="search">🔍</span>}
           />
-          <Button variant="flat">View all</Button>
+          <Button as={Link} to="/workspaces" variant="flat">
+            View all
+          </Button>
         </div>
         <div className="workspace-grid">
-          {filtered.map((ws) => (
-            <Card key={ws.id} className="workspace-card">
-              <CardHeader className="workspace-card__header">
-                <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden>
-                  {ws.icon}
-                </div>
-                <div>
-                  <p className="eyebrow">{ws.lastActivity}</p>
-                  <h3>{ws.name}</h3>
-                  <p className="muted">{ws.description}</p>
-                </div>
-              </CardHeader>
-              <CardBody className="workspace-card__body">
-                <div className="workspace-metrics">
-                  <span>{ws.members} members</span>
-                  <span>{ws.activeTasks} active tasks</span>
-                  <span>{ws.workflows} workflows</span>
-                </div>
-                <div className="workspace-actions">
-                  <Button size="sm" variant="flat">
-                    View
-                  </Button>
-                  <Button size="sm" color="primary">
-                    Open
-                  </Button>
-                </div>
-              </CardBody>
-            </Card>
-          ))}
-          {filtered.length === 0 && <p className="muted">No workspaces found. Try a different search.</p>}
+          {loading && <SkeletonList count={3} />}
+          {!loading &&
+            filtered.map((ws) => (
+              <Card key={ws.id} className="workspace-card">
+                <CardHeader className="workspace-card__header">
+                  <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden>
+                    {ws.icon}
+                  </div>
+                  <div>
+                    <p className="eyebrow">{ws.lastActivity}</p>
+                    <h3>{ws.name}</h3>
+                    <p className="muted">{ws.description}</p>
+                  </div>
+                </CardHeader>
+                <CardBody className="workspace-card__body">
+                  <div className="workspace-metrics">
+                    <span>{ws.members} members</span>
+                    <span>{ws.activeTasks} active tasks</span>
+                    <span>{ws.workflows} workflows</span>
+                  </div>
+                  <div className="workspace-actions">
+                    <Button as={Link} to={`/workspaces/${ws.id}`} size="sm" variant="flat">
+                      View
+                    </Button>
+                    <Button as={Link} to={`/workspaces/${ws.id}`} size="sm" color="primary">
+                      Open
+                    </Button>
+                  </div>
+                </CardBody>
+              </Card>
+            ))}
+          {!loading && filtered.length === 0 && (
+            <EmptyState
+              title="No workspaces match"
+              message="Try a different search or create a new workspace to get started."
+              actionLabel="Browse workspaces"
+              to="/workspaces"
+            />
+          )}
         </div>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { activityFeed, quickActions, upcomingItems } from '../data/mockData';
+import { mockData } from '../data/mockData';
 
 const metricCards = [
   { label: 'Active Tasks', value: 18, delta: '+12% WoW' },
@@ -42,7 +42,7 @@ const DashboardPage = () => {
             </div>
           </div>
           <div className="timeline">
-            {activityFeed.map((activity) => (
+            {mockData.activityFeed.map((activity) => (
               <div className="timeline-item" key={activity.id}>
                 <span className="icon" aria-hidden="true">
                   {activity.type === 'workflow' ? '⚙️' : activity.type === 'knowledge' ? '📚' : '✅'}
@@ -66,7 +66,7 @@ const DashboardPage = () => {
               <h2>Quick Actions</h2>
             </div>
             <div className="stack" style={{ gap: '0.75rem' }}>
-              {quickActions.map((action) => (
+              {mockData.quickActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.to}
@@ -84,15 +84,27 @@ const DashboardPage = () => {
               <button className="ghost">Manage</button>
             </div>
             <div className="stack" style={{ gap: '1rem' }}>
-              {upcomingItems.map((item) => (
+              {mockData.schedules.map((item) => (
                 <div key={item.id}>
                   <p style={{ margin: 0, fontWeight: 600 }}>{item.name}</p>
                   <p className="workspace" style={{ margin: 0 }}>
                     {item.time} · {item.workspace}
                   </p>
                   <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-                    <button className="ghost">Reschedule</button>
-                    <button className="ghost">Cancel</button>
+                    <Link
+                      to={item.relatedTaskId ? `/tasks/${item.relatedTaskId}` : '/tasks'}
+                      className="ghost"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      Reschedule
+                    </Link>
+                    <Link
+                      to={item.relatedTaskId ? `/tasks/${item.relatedTaskId}` : '/tasks'}
+                      className="ghost"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      Cancel
+                    </Link>
                   </div>
                 </div>
               ))}
