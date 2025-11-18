@@ -4,6 +4,7 @@ export const activityFeed = [
     description: 'Validated findings for Climate Impact task',
     user: 'Avery Chen',
     workspace: 'Atlas Research',
+    workspaceId: 'atlas',
     timestamp: '5m ago',
     type: 'validation'
   },
@@ -12,6 +13,7 @@ export const activityFeed = [
     description: 'Workflow "Market Pulse" started',
     user: 'Workflow Engine',
     workspace: 'Nova Labs',
+    workspaceId: 'nova',
     timestamp: '12m ago',
     type: 'workflow'
   },
@@ -20,16 +22,64 @@ export const activityFeed = [
     description: 'New knowledge article on Synthetic Data Patterns',
     user: 'Samira Patel',
     workspace: 'Atlas Research',
+    workspaceId: 'atlas',
     timestamp: '35m ago',
     type: 'knowledge'
+  },
+  {
+    id: '4',
+    description: 'Completed validation for Global Risk Radar',
+    user: 'Priya Kumar',
+    workspace: 'Civic Lens',
+    workspaceId: 'civic',
+    timestamp: '1h ago',
+    type: 'validation'
+  },
+  {
+    id: '5',
+    description: 'Workspace invite accepted by new analyst',
+    user: 'System',
+    workspace: 'Atlas Research',
+    workspaceId: 'atlas',
+    timestamp: '2h ago',
+    type: 'workspace'
+  },
+  {
+    id: '6',
+    description: 'Workflow "Supply Chain Sentinel" published',
+    user: 'Nova Liang',
+    workspace: 'Nova Labs',
+    workspaceId: 'nova',
+    timestamp: '3h ago',
+    type: 'workflow'
   }
 ];
 
 export const quickActions = [
-  { label: 'Create New Task', to: '/tasks/create', accent: 'primary' },
-  { label: 'Create New Workflow', to: '/workflow-designer', accent: 'secondary' },
-  { label: 'Create New Workspace', to: '/workspaces', accent: 'primary' },
-  { label: 'Browse Knowledge Base', to: '/knowledge', accent: 'secondary' }
+  {
+    label: 'Create New Task',
+    to: '/tasks/create',
+    accent: 'primary',
+    description: 'Capture a new objective or follow-up item and assign an owner.'
+  },
+  {
+    label: 'Create New Workflow',
+    to: '/workflow-designer',
+    accent: 'secondary',
+    description: 'Design an automation with triggers, approvals, and runbooks.'
+  },
+  {
+    label: 'Create New Workspace',
+    to: '/workspaces',
+    accent: 'primary',
+    description: 'Spin up a dedicated collaboration space with members and goals.'
+  },
+  {
+    label: 'Browse Knowledge Base',
+    to: '/knowledge',
+    accent: 'secondary',
+    description: 'Search best practices, runbooks, and previous research drops.'
+  }
 ];
 
 export const upcomingItems = [
