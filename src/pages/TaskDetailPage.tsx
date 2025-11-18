@@ -1,5 +1,8 @@
-import { useParams } from 'react-router-dom';
-import { tasks } from '../data/mockData';
+import { useMemo } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { EmptyState, ErrorToast, SkeletonBlock, SkeletonList } from '../components/AsyncStates';
+import { mockData } from '../data/mockData';
+import { useMockedData } from '../hooks/useMockedData';
 
 const phases = [
   { name: 'Planning', status: 'Completed', duration: '12m', summary: 'Framed objectives and scope.' },
@@ -11,7 +14,50 @@ const phases = [
 
 const TaskDetailPage = () => {
   const { id } = useParams();
-  const task = tasks.find((t) => t.id === id) ?? tasks[0];
+  const { data, loading, error, reload } = useMockedData(() => mockData.tasks, { failFirst: true });
+  const task = useMemo(() => data?.find((t) => t.id === id), [data, id]);
+  const workspaceName = useMemo(
+    () => mockData.workspaces.find((ws) => ws.id === task?.workspaceId)?.name ?? 'Atlas Research',
+    [task?.workspaceId]
+  );
+
+  if (loading) {
+    return (
+      <div className="stack">
+        <SkeletonList count={1} />
+        <div className="grid-two">
+          <div className="stack" style={{ gap: '1.5rem' }}>
+            <div className="card">
+              <SkeletonBlock width="40%" />
+              <SkeletonBlock width="70%" />
+            </div>
+            <div className="card">
+              <SkeletonBlock width="30%" />
+              <SkeletonBlock width="80%" />
+            </div>
+          </div>
+          <div className="card">
+            <SkeletonBlock width="50%" />
+            <SkeletonBlock width="60%" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!task) {
+    return (
+      <div className="stack">
+        <EmptyState
+          title="Task not found"
+          message="We couldn't find that task. Try navigating from the task list instead."
+          actionLabel="Back to tasks"
+          to="/tasks"
+        />
+        <ErrorToast message={error} onRetry={reload} />
+      </div>
+    );
+  }
 
   return (
     <div className="stack">
@@ -22,16 +68,22 @@ const TaskDetailPage = () => {
             <h1 style={{ margin: 0 }}>{task.name}</h1>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button className="ghost">Edit</button>
-            <button className="ghost">Cancel</button>
-            <button className="ghost">Clone</button>
+            <Link className="ghost" to="/tasks/create">
+              Edit
+            </Link>
+            <Link className="ghost" to="/tasks">
+              Cancel
+            </Link>
+            <Link className="ghost" to="/tasks/create">
+              Clone
+            </Link>
           </div>
         </div>
         <p>{task.objective}</p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <span className="badge info">Status: {task.status}</span>
           <span className="badge info">Priority: {task.priority}</span>
-          <span className="badge info">Workspace: Atlas Research</span>
+          <span className="badge info">Workspace: {workspaceName}</span>
         </div>
       </section>
 
@@ -77,6 +129,7 @@ const TaskDetailPage = () => {
           </div>
         </aside>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };

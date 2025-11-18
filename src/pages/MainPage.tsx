@@ -1,19 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-  Divider,
-  Input,
-  Skeleton,
-  Spacer,
-  Tab,
-  Tabs,
-  User
-} from '@heroui/react';
-import { activityFeed, upcomingItems, workspaces } from '../data/mockData';
+import { useMemo, useState } from 'react';
+import { Button, Card, CardBody, CardHeader, Chip, Input, Spacer, Tabs, Tab, User } from '@heroui/react';
+import { Link } from 'react-router-dom';
+import { mockData } from '../data/mockData';
+import { EmptyState, ErrorToast, SkeletonList } from '../components/AsyncStates';
+import { useMockedData } from '../hooks/useMockedData';
 
 const environmentName = 'SageScope Environment';
 
@@ -26,29 +16,12 @@ const summaryTiles = [
 ];
 
 const MainPage = () => {
+  const { data: workspaceData, loading, error, reload } = useMockedData(() => mockData.workspaces, { failFirst: true });
   const [query, setQuery] = useState('');
-  const [loadingActivity, setLoadingActivity] = useState(true);
-  const [loadingUpcoming, setLoadingUpcoming] = useState(true);
-
-  useEffect(() => {
-    const activityTimer = setTimeout(() => setLoadingActivity(false), 500);
-    const upcomingTimer = setTimeout(() => setLoadingUpcoming(false), 650);
-
-    return () => {
-      clearTimeout(activityTimer);
-      clearTimeout(upcomingTimer);
-    };
-  }, []);
-
-  const normalizedQuery = query.trim().toLowerCase();
+  const workspaces = workspaceData ?? [];
   const filtered = useMemo(
-    () =>
-      workspaces.filter((ws) =>
-        [ws.name, ws.description, ...ws.tags]
-          .filter(Boolean)
-          .some((field) => field.toLowerCase().includes(normalizedQuery))
-      ),
-    [normalizedQuery]
+    () => workspaces.filter((ws) => ws.name.toLowerCase().includes(query.toLowerCase())),
+    [query, workspaces]
   );
 
   return (
@@ -158,14 +131,9 @@ const MainPage = () => {
             <h2>Search, view, and add</h2>
             <p className="muted">Find a workspace quickly or spin up a new one to start collaborating.</p>
           </div>
-          <div className="workspace-actions">
-            <Button variant="flat" startContent={<span aria-hidden>📁</span>}>
-              View all
-            </Button>
-            <Button color="primary" startContent={<span aria-hidden>＋</span>}>
-              Add Workspace
-            </Button>
-          </div>
+          <Button as={Link} to="/workspaces" color="primary">
+            Add Workspace
+          </Button>
         </div>
         <div className="workspace-search__controls">
           <Input
@@ -175,133 +143,53 @@ const MainPage = () => {
             onChange={(e) => setQuery(e.target.value)}
             startContent={<span role="img" aria-label="search">🔍</span>}
           />
-          <Button variant="bordered">Filter</Button>
+          <Button as={Link} to="/workspaces" variant="flat">
+            View all
+          </Button>
         </div>
         <div className="workspace-grid">
-          {filtered.map((ws) => (
-            <Card key={ws.id} className="workspace-card">
-              <CardHeader className="workspace-card__header">
-                <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden>
-                  {ws.icon}
-                </div>
-                <div>
-                  <p className="eyebrow">{ws.lastActivity}</p>
-                  <h3>{ws.name}</h3>
-                  <p className="muted">{ws.description}</p>
-                </div>
-              </CardHeader>
-              <CardBody className="workspace-card__body">
-                <div className="workspace-metrics">
-                  <span>{ws.members} members</span>
-                  <span>{ws.activeTasks} active tasks</span>
-                  <span>{ws.workflows} workflows</span>
-                </div>
-                <div className="workspace-tags">
-                  {ws.tags.map((tag) => (
-                    <Chip key={tag} size="sm" variant="flat" color="default">
-                      {tag}
-                    </Chip>
-                  ))}
-                </div>
-                <div className="workspace-actions">
-                  <Button size="sm" variant="flat">
-                    View
-                  </Button>
-                  <Button size="sm" color="primary">
-                    Open
-                  </Button>
-                </div>
-              </CardBody>
-            </Card>
-          ))}
-          {filtered.length === 0 && <p className="muted">No workspaces found. Try a different search.</p>}
+          {loading && <SkeletonList count={3} />}
+          {!loading &&
+            filtered.map((ws) => (
+              <Card key={ws.id} className="workspace-card">
+                <CardHeader className="workspace-card__header">
+                  <div className="workspace-icon" style={{ backgroundColor: ws.color }} aria-hidden>
+                    {ws.icon}
+                  </div>
+                  <div>
+                    <p className="eyebrow">{ws.lastActivity}</p>
+                    <h3>{ws.name}</h3>
+                    <p className="muted">{ws.description}</p>
+                  </div>
+                </CardHeader>
+                <CardBody className="workspace-card__body">
+                  <div className="workspace-metrics">
+                    <span>{ws.members} members</span>
+                    <span>{ws.activeTasks} active tasks</span>
+                    <span>{ws.workflows} workflows</span>
+                  </div>
+                  <div className="workspace-actions">
+                    <Button as={Link} to={`/workspaces/${ws.id}`} size="sm" variant="flat">
+                      View
+                    </Button>
+                    <Button as={Link} to={`/workspaces/${ws.id}`} size="sm" color="primary">
+                      Open
+                    </Button>
+                  </div>
+                </CardBody>
+              </Card>
+            ))}
+          {!loading && filtered.length === 0 && (
+            <EmptyState
+              title="No workspaces match"
+              message="Try a different search or create a new workspace to get started."
+              actionLabel="Browse workspaces"
+              to="/workspaces"
+            />
+          )}
         </div>
       </section>
-
-      <div className="dashboard-widgets">
-        <Card className="widget-card">
-          <CardHeader className="widget-header">
-            <div>
-              <p className="eyebrow">Activity</p>
-              <h3>Recent activity</h3>
-            </div>
-            <Button size="sm" variant="light">
-              View all
-            </Button>
-          </CardHeader>
-          <CardBody className="widget-body">
-            {loadingActivity && (
-              <div className="skeleton-stack">
-                <Skeleton className="skeleton-line" />
-                <Skeleton className="skeleton-line" />
-                <Skeleton className="skeleton-line" />
-              </div>
-            )}
-            {!loadingActivity && (
-              <div className="updates">
-                {activityFeed.length === 0 && <p className="muted">No activity to display.</p>}
-                {activityFeed.length > 0 &&
-                  activityFeed.map((item) => (
-                    <div key={item.id} className="update-row">
-                      <Chip size="sm" variant="flat" color="primary">
-                        {item.type}
-                      </Chip>
-                      <div>
-                        <p className="update-title">{item.description}</p>
-                        <p className="muted">
-                          {item.workspace} · {item.user} · {item.timestamp}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            )}
-          </CardBody>
-        </Card>
-
-        <Card className="widget-card">
-          <CardHeader className="widget-header">
-            <div>
-              <p className="eyebrow">Schedule</p>
-              <h3>Upcoming items</h3>
-            </div>
-            <Button size="sm" variant="light">
-              Manage
-            </Button>
-          </CardHeader>
-          <CardBody className="widget-body">
-            {loadingUpcoming && (
-              <div className="skeleton-stack">
-                <Skeleton className="skeleton-line" />
-                <Skeleton className="skeleton-line" />
-              </div>
-            )}
-            {!loadingUpcoming && (
-              <div className="stack" style={{ gap: '1rem' }}>
-                {upcomingItems.length === 0 && <p className="muted">Nothing scheduled. Add an item to get started.</p>}
-                {upcomingItems.map((item) => (
-                  <div key={item.id} className="upcoming-item">
-                    <div>
-                      <p className="update-title">{item.name}</p>
-                      <p className="muted">
-                        {item.time} · {item.workspace}
-                      </p>
-                    </div>
-                    <div className="workspace-actions">
-                      <Button size="sm" variant="flat">
-                        Reschedule
-                      </Button>
-                      <Button size="sm" variant="flat" color="danger">
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardBody>
-        </Card>
-      </div>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };

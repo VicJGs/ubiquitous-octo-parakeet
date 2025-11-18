@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const phases = ['Planning', 'Information Gathering', 'Analysis', 'Synthesis', 'Validation'];
 
 const TaskCreationPage = () => {
@@ -10,8 +12,12 @@ const TaskCreationPage = () => {
             <h1 style={{ margin: 0 }}>Create Task</h1>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button className="ghost">Save Draft</button>
-            <button className="primary">Create & Start</button>
+            <Link to="/tasks" className="ghost" style={{ textDecoration: 'none' }}>
+              Save Draft
+            </Link>
+            <Link to="/tasks" className="primary" style={{ textDecoration: 'none', color: '#fff' }}>
+              Create & Start
+            </Link>
           </div>
         </div>
         <p>Configure objectives, phases, tools, workflows, and governance controls.</p>
@@ -43,7 +49,9 @@ const TaskCreationPage = () => {
                 <h2>
                   Phase {index + 1}: {phase}
                 </h2>
-                <button className="ghost">Configure</button>
+                <Link to="/workflow-designer" className="ghost" style={{ textDecoration: 'none' }}>
+                  Configure
+                </Link>
               </div>
               <p>
                 Describe objectives, expected outcomes, assign tools, workflows, and dependencies for the {phase.toLowerCase()} phase.

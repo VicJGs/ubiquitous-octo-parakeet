@@ -1,9 +1,31 @@
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { workspaces, activityFeed } from '../data/mockData';
+import { EmptyState, ErrorToast, SkeletonList } from '../components/AsyncStates';
+import { mockData } from '../data/mockData';
+import { useMockedData } from '../hooks/useMockedData';
 
 const WorkspaceDetailPage = () => {
   const { id } = useParams();
-  const workspace = workspaces.find((w) => w.id === id) ?? workspaces[0];
+  const { data, loading, error, reload } = useMockedData(() => mockData.workspaces, { failFirst: true });
+  const workspace = useMemo(() => data?.find((w) => w.id === id), [data, id]);
+
+  if (loading) {
+    return <SkeletonList count={2} />;
+  }
+
+  if (!workspace) {
+    return (
+      <div className="stack">
+        <EmptyState
+          title="Workspace missing"
+          message="We couldn't find this workspace."
+          actionLabel="Back to workspaces"
+          to="/workspaces"
+        />
+        <ErrorToast message={error} onRetry={reload} />
+      </div>
+    );
+  }
 
   return (
     <div className="stack">
@@ -14,8 +36,12 @@ const WorkspaceDetailPage = () => {
             <h1 style={{ margin: 0 }}>{workspace.name}</h1>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button className="ghost">Share</button>
-            <button className="ghost">Edit</button>
+            <Link className="ghost" to="/home">
+              Share
+            </Link>
+            <Link className="ghost" to="/workspaces">
+              Edit
+            </Link>
           </div>
         </div>
         <p>{workspace.description}</p>
@@ -68,7 +94,7 @@ const WorkspaceDetailPage = () => {
           <button className="ghost">View all</button>
         </div>
         <div className="timeline">
-          {activityFeed.map((activity) => (
+          {mockData.activityFeed.map((activity) => (
             <div key={activity.id} className="timeline-item">
               <span className="icon">📌</span>
               <div>
@@ -81,6 +107,7 @@ const WorkspaceDetailPage = () => {
           ))}
         </div>
       </section>
+      <ErrorToast message={error} onRetry={reload} />
     </div>
   );
 };
